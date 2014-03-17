@@ -1,0 +1,13 @@
+.DS_Store
+.rvmrc
+.yardoc
+coverage
+coverage.data
+doc
+pkg
+.bundle
+.idea
+.rspec-local
+.ruby-gemset
+.ruby-version
+Gemfile.lock
