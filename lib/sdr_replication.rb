@@ -1,17 +1,20 @@
 require 'rubygems'
 require 'bundler/setup'
 Bundler.setup
-require 'pathname'
-require 'find'
 require 'digest'
-require 'json'
-require 'systemu'
+require 'find'
+require 'json/pure'
 require 'moab_stanford'
+require 'pathname'
+require 'rest-client'
+require 'systemu'
+
 
 # The classes used for SDR Replication workflows
 module Replication
-
 end
+
+require 'replication/archive_catalog'
 require 'replication/bagit_bag'
 require 'replication/file_fixity'
 require 'replication/fixity'

@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency "json_pure"
   s.add_dependency "moab-versioning"
   s.add_dependency "systemu"
+  s.add_dependency "rest-client"
 
   s.add_development_dependency "awesome_print"
   s.add_development_dependency "equivalent-xml"
