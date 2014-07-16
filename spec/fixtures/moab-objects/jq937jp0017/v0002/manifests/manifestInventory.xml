@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<fileInventory type="manifests" objectId="druid:jq937jp0017" versionId="2" inventoryDatetime="2012-11-13T22:24:25Z" fileCount="4" byteCount="14303" blockCount="16">
-  <fileGroup groupId="manifests" dataSource="/Users/rnanders/Code/Ruby/moab-versioning/spec/fixtures/derivatives/ingests/jq937jp0017/v0002/manifests" fileCount="4" byteCount="14303" blockCount="16">
+<fileInventory type="manifests" objectId="druid:jq937jp0017" versionId="2" inventoryDatetime="2014-07-15T23:16:33Z" fileCount="4" byteCount="15197" blockCount="17">
+  <fileGroup groupId="manifests" dataSource="/Users/rnanders/Code/Github/sdr-replication/spec/fixtures/moab-objects/jq937jp0017/v0002/manifests" fileCount="4" byteCount="15197" blockCount="17">
     <file>
-      <fileSignature size="4925" md5="fcafd3db604f07cdd40ed64459a558c5" sha1="fcbd97d681c2e9947df56c1aa73735b43911af11" sha256="b3469e7a15cba9974ec23fdc43ee9bb85574d07cc85647f3d40411debc51c852"/>
-      <fileInstance path="fileInventoryDifference.xml" datetime="2012-11-13T22:24:25Z"/>
+      <fileSignature size="5222" md5="801043ffc1babf983dec9374c3908cd2" sha1="5b02c0f324c95ec9360f32600ebbe7116c325c0b" sha256="1d7b124dffdd619e9badf29efb0770e39ea7cb96e7ef1f9e90e259c5b76302b7"/>
+      <fileInstance path="fileInventoryDifference.xml" datetime="2014-07-15T23:15:00Z"/>
     </file>
     <file>
-      <fileSignature size="4469" md5="d73bfee6baa8fc1ff16e7e0b591481ec" sha1="bc2c22337f599310f92b79addaeab8df2c77e003" sha256="9c242aada2a419b0458ba468045a873c1c391994af83eb0d0cd04f8bde847127"/>
-      <fileInstance path="signatureCatalog.xml" datetime="2012-11-13T22:24:25Z"/>
+      <fileSignature size="4761" md5="c201ea23caa30f517bbd68ba37d1113f" sha1="26b9d2267a6dba166c279f20818215824041bf51" sha256="d3e46ef2d62e5df16ed2cb7f774d10bd6b34dd5abcf571cbf6f35e5aa1ab5da1"/>
+      <fileInstance path="signatureCatalog.xml" datetime="2014-07-15T22:57:15Z"/>
     </file>
     <file>
       <fileSignature size="1631" md5="eb0793c0626ea416fac64b76b2c9584c" sha1="d8389ec4fc286a75a11fb17b1015450e72df9e2c" sha256="455b904e373c4875679450c435319105f5d43b8e7f4dbfda470f5d3eb72ab85f"/>
       <fileInstance path="versionAdditions.xml" datetime="2012-11-13T22:23:48Z"/>
     </file>
     <file>
-      <fileSignature size="3278" md5="bb218f0edbf8a03414c68e254a35e9a4" sha1="5a33ab9c7e91677ece0d371bee92dbcf0e58672c" sha256="feff293f9f4b2b0c97d223ee7905d58e72898b7d3e1960c8b3966a8b1d30d9bf"/>
-      <fileInstance path="versionInventory.xml" datetime="2012-11-13T22:23:48Z"/>
+      <fileSignature size="3583" md5="57f325870472b224a64a3915ba2bbacd" sha1="1484cfc15faabe58ffe894aeee25e489208ed58e" sha256="4387f479f5280426d43a253d7acc109e056551bf55c2435d3734ba891b82bf9c"/>
+      <fileInstance path="versionInventory.xml" datetime="2014-07-15T22:58:59Z"/>
     </file>
   </fileGroup>
 </fileInventory>

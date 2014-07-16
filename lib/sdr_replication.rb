@@ -20,6 +20,7 @@ require 'replication/file_fixity'
 require 'replication/fixity'
 require 'replication/operating_system'
 require 'replication/replica'
+require 'replication/sdr_object'
 require 'replication/sdr_object_version'
 require 'replication/tarfile'
 include Replication

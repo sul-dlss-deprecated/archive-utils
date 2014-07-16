@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<fileInventory type="version" objectId="druid:jq937jp0017" versionId="3" inventoryDatetime="2012-11-13T22:23:48Z" fileCount="10" byteCount="178628" blockCount="178">
+<fileInventory type="version" objectId="druid:jq937jp0017" versionId="3" inventoryDatetime="2012-11-13T22:23:48Z" fileCount="11" byteCount="179051" blockCount="179">
   <fileGroup groupId="content" dataSource="/Users/rnanders/Code/Ruby/moab-versioning/spec/fixtures/data/jq937jp0017/v0003/content" fileCount="5" byteCount="171902" blockCount="170">
     <file>
       <fileSignature size="32915" md5="c1c34634e2f18a354cd3e3e1574c3194" sha1="0616a0bd7927328c364b2ea0b4a79c507ce915ed" sha256="b78cc53b7b8d9ed86d5e3bab3b699c7ed0db958d4a111e56b6936c8397137de0"/>
@@ -22,7 +22,7 @@
       <fileInstance path="title.jpg" datetime="2012-03-26T14:15:11Z"/>
     </file>
   </fileGroup>
-  <fileGroup groupId="metadata" dataSource="/Users/rnanders/Code/Ruby/moab-versioning/spec/fixtures/data/jq937jp0017/v0003/metadata" fileCount="5" byteCount="6726" blockCount="8">
+  <fileGroup groupId="metadata" dataSource="/Users/rnanders/Code/Ruby/moab-versioning/spec/fixtures/data/jq937jp0017/v0003/metadata" fileCount="6" byteCount="7149" blockCount="9">
     <file>
       <fileSignature size="1586" md5="7e551285744fbe06d25c525fe1b6fd3c" sha1="c88408b79cb0fcf4c06ae4e0bd21662e21eee741" sha256="0cbf6ace137ad69607b3bb14a488bb5501e2c9e3279cd147840fe6c6a5fa70ca"/>
       <fileInstance path="contentMetadata.xml" datetime="2012-03-28T14:04:24Z"/>
@@ -38,6 +38,10 @@
     <file>
       <fileSignature size="564" md5="17071e4607de4b272f3f06ec76be4c4a" sha1="b796a0b569bde53953ba0835bb47f4009f654349" sha256="452cd9fa6c3b8f4bd5dfda1b7f3752b4058a82b94c6f4583e4e5fe1e51317d80"/>
       <fileInstance path="provenanceMetadata.xml" datetime="2012-03-26T19:24:24Z"/>
+    </file>
+    <file>
+      <fileSignature size="423" md5="1029edb62114496d07e3d1294b28b15f" sha1="f42d500f44cd9abe3dd1348bc61203acd593f4ae" sha256="6bd343a4062119a5181339b02073568efafef463c12ac1c33c71a35cea8cc35a"/>
+      <fileInstance path="relationshipMetadata.xml" datetime="2014-07-15T14:23:12Z"/>
     </file>
     <file>
       <fileSignature size="589" md5="ab28cda36767a2ca0ca7aa8322ee6516" sha1="6fc850a1b106a1b039a597d319e821845150d85a" sha256="db9a480e829d17aa26b19ce2d52f5cc12c3cc99b4f30e6c0a217d41bd38a6298"/>

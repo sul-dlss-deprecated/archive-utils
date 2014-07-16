@@ -4,7 +4,7 @@ $:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name        = "sdr-replication"
-  s.version     = "0.1.0"
+  s.version     = "0.2.0"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Richard Anderson"]
   s.email       = ["rnanders@stanford.edu"]
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   # Runtime dependencies
   s.add_dependency "json_pure"
-  s.add_dependency "moab-versioning"
+  s.add_dependency "moab-versioning", '~> 1.3'
   s.add_dependency "systemu"
   s.add_dependency "rest-client"
 
