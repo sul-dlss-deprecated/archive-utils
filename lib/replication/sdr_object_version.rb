@@ -8,18 +8,19 @@ module Replication
   #   All rights reserved.  See {file:LICENSE.rdoc} for details.
   class SdrObjectVersion < Moab::StorageObjectVersion
 
+    # @return [String] The digital object's identifier (druid)
     def digital_object_id
       storage_object.digital_object_id
     end
 
     # @return [Moab::FileInventory] The moab version manifest for the version
     def version_inventory
-      @version_inventory ||= file_inventory('version')
+      file_inventory('version')
     end
 
     # @return [Moab::FileInventory] The moab version manifest for the version
     def version_additions
-      @version_additions ||= file_inventory('additions')
+      file_inventory('additions')
     end
 
     # @return [Hash] The contents of the versionMetadata file
@@ -65,6 +66,7 @@ module Replication
       metadata
     end
 
+    # @return [Boolean] Update digital_objects and sdr_objects tables in Archive Catalog
     def update_object_data
 
       identity_metadata = parse_identity_metadata
@@ -90,10 +92,13 @@ module Replication
         ArchiveCatalog.update_item(:sdr_objects, digital_object_id, sdr_object_data)
       end
 
+      true
     end
 
+    # @return [Boolean] Update sdr_object_versions and sdr_version_stats tables in Archive Catalog
     def update_version_data
 
+      version_inventory = self.version_inventory
       sdr_object_version_data = {
           :sdr_object_id => digital_object_id,
           :sdr_version_id => version_id,
@@ -118,6 +123,7 @@ module Replication
       }
       ArchiveCatalog.find_or_create_item(:sdr_version_stats, sdr_version_full)
 
+      version_additions = self.version_additions
       content = version_additions.group('content')
       metadata = version_additions.group('metadata')
       sdr_version_delta = {
@@ -133,28 +139,24 @@ module Replication
       }
       ArchiveCatalog.find_or_create_item(:sdr_version_stats, sdr_version_delta)
 
-    end
-
-
-    # @return [String] The unique identifier for the digital object replica
-    def replica_id
-      @replica_id ||= "#{storage_object.digital_object_id.split(':').last}-#{version_name}"
+      true
     end
 
     # @return [Replica] The Replica of the object version that is archived to tape, etc
     def replica
-      @replica ||= Replica.new(replica_id, 'sdr')
+      Replica.new(composite_key.sub(/^druid:/,''), 'sdr')
     end
 
-    # @return [BagitBag] Copy the object version into a BagIt Bag in tarfile format
-    def moab_to_replica_bag
-      bag_dir = replica.replica_pathname
-      bag = BagitBag.create_bag(bag_dir)
+    # @return [Replica] Copy the object version into a BagIt Bag in tarfile format
+    def create_replica
+      replica = self.replica
+      bag = BagitBag.create_bag(replica.bag_pathname)
       bag.bag_checksum_types = [:sha256]
-      bag.add_payload_tarfile("#{replica_id}.tar",version_pathname, storage_object.object_pathname.parent)
+      bag.add_payload_tarfile("#{replica.replica_id}.tar",version_pathname, storage_object.object_pathname.parent)
       bag.write_bag_info_txt
       bag.write_manifest_checksums('tagmanifest', bag.generate_tagfile_checksums)
-      bag
+      replica.bagit_bag = bag
+      replica
     end
 
   end

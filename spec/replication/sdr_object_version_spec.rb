@@ -24,6 +24,7 @@ describe 'Replication::SdrObjectVersion' do
       @druid = "druid:jq937jp0017"
       @sdr_object = SdrObject.new(@druid)
       @sdr_object_version = SdrObjectVersion.new(@sdr_object,1)
+      Replica.replica_cache_pathname = Pathname(Dir.mktmpdir("replica_cache"))
     end
     
     # Unit test for method: {Replication::SdrObjectVersion#digital_object_id}
@@ -135,18 +136,15 @@ describe 'Replication::SdrObjectVersion' do
 
     end
 
-    # Unit test for method: {Replication::SdrObjectVersion#replica_id}
-    # Which returns: [String] The unique identifier for the digital object replica
-    # For input parameters: (None)
-    specify 'Replication::SdrObjectVersion#replica_id' do
-      expect(@sdr_object_version.replica_id).to eq("jq937jp0017-v0001")
-    end
-    
     # Unit test for method: {Replication::SdrObjectVersion#replica}
     # Which returns: [Replica] The Replica of the object version that is archived to tape, etc
     # For input parameters: (None)
     specify 'Replication::SdrObjectVersion#replica' do
+      replica = @sdr_object_version.replica
       expect(@sdr_object_version.replica).to be_instance_of(Replica)
+      expect(replica.replica_id).to eq('jq937jp0017-v0001')
+      expect(replica.home_repository).to eq('sdr')
+      expect(replica.bag_pathname).to eq(Replica.replica_cache_pathname.join("sdr/jq937jp0017-v0001"))
        
       # def replica
       #   @replica ||= Replica.new(@replica_id, 'sdr')
@@ -156,10 +154,10 @@ describe 'Replication::SdrObjectVersion' do
     # Unit test for method: {Replication::SdrObjectVersion#moab_to_replica_bag}
     # Which returns: [BagitBag] Copy the object version into a BagIt Bag in tarfile format
     # For input parameters: (None)
-    specify 'Replication::SdrObjectVersion#moab_to_replica_bag' do
-      Replica.replica_cache_pathname = Pathname(Dir.mktmpdir("replica_cache"))
-      bag = @sdr_object_version.moab_to_replica_bag
-      expect(bag).to be_instance_of(BagitBag)
+    specify 'Replication::SdrObjectVersion#create_replica' do
+      replica = @sdr_object_version.create_replica
+      expect(replica).to be_instance_of(Replica)
+      bag = replica.bagit_bag
       expect(bag.bag_pathname).to eq(Replica.replica_cache_pathname.join("sdr/jq937jp0017-v0001"))
       expect(bag.verify_bag).to eq(true)
       Replica.replica_cache_pathname.rmtree

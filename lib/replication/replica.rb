@@ -52,8 +52,36 @@ module Replication
     end
 
     # @return [Pathname] The location of the replica bag
-    def replica_pathname
-      @replica_pathname ||= @@replica_cache_pathname.join(home_repository,replica_id)
+    def bag_pathname
+      @@replica_cache_pathname.join(@home_repository,@replica_id)
+    end
+
+    # @return [Replica] Open the replica's bag and extract its properties
+    def get_bag_data
+      bag = BagitBag.open_bag(bag_pathname)
+      @create_date = UtcTime.output(bag_pathname.ctime)
+      size_hash = bag.info_payload_size
+      @payload_size = size_hash[:bytes]
+      file_fixity_hash = bag.read_manifest_files('manifest')
+      tarfile_fixity = file_fixity_hash.values.first
+      checksums = tarfile_fixity.checksums
+      @payload_fixity_type = checksums.keys.last.to_s
+      @payload_fixity = checksums[@payload_fixity_type.to_sym]
+      self
+    end
+
+    # @return [Boolean] Update the replicas table of the Archive Catalog
+    def update_replica_data
+      replica_data = {
+          :replica_id => @replica_id,
+          :home_repository => @home_repository,
+          :create_date => @create_date,
+          :payload_size => @payload_size,
+          :payload_fixity_type => @payload_fixity_type,
+          :payload_fixity => @payload_fixity
+      }
+      ArchiveCatalog.find_or_create_item(:replicas, replica_data)
+      true
     end
 
   end

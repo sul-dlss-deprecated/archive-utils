@@ -1,0 +1,3 @@
+External-Identifier: jq937jp0017-v0001
+Payload-Oxum: 275456.1
+Bag-Size: 269.00 KB
