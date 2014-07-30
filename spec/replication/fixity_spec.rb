@@ -94,7 +94,7 @@ describe 'Replication::Fixity' do
     # * path_list [Array<Pathname>] = The list of pathnames for files whose fixity will be generated
     specify 'Replication::Fixity.generate_checksums' do
       source_basepath = @fixtures.join('source-dir')
-      file_fixity_hash = Fixity.generate_checksums(source_basepath, nil,[:sha1,:sha256])
+      file_fixity_hash = Fixity.generate_checksums(source_basepath, source_basepath.find,[:sha1,:sha256])
       checksum_hash =  Fixity.file_checksum_hash(file_fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({

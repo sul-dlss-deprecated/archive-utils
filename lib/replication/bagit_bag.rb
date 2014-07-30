@@ -82,11 +82,11 @@ module Replication
     end
 
     # @param [Symbol] link_mode Specifies whether to :copy, :link, or :symlink the files to the payload directory
-    # @param [Pathname] source_dir The source location of the directory whose contents are to be ingested
-    # @return [Pathname] Generate file_fixity_hash and send it to #add_payload_files
-    def add_payload_dir (link_mode, source_dir)
-      file_fixity_hash = Fixity.generate_checksums(source_dir, nil ,bag_checksum_types)
-      add_payload_files(link_mode, source_dir, file_fixity_hash)
+    # @param [Pathname] source_dir The source location of the directory whose contents are to be bagged
+    # @return [Pathname] Generate file_fixity_hash and send it to #add_files_to_payload
+    def add_dir_to_payload (link_mode, source_dir)
+      file_fixity_hash = Fixity.generate_checksums(source_dir, source_dir.find ,bag_checksum_types)
+      add_files_to_payload(link_mode, source_dir, file_fixity_hash)
       payload_pathname
     end
 
@@ -95,14 +95,25 @@ module Replication
     # @param [Hash<String,FileFixity>] file_fixity_hash The list of files (with fixity data) to be added to the payload
     # @return [Pathname] Copy or link the files specified in the file_fixity_hash to the payload directory,
     #   then update the payload manifest files
-    def add_payload_files(link_mode, source_basepath, file_fixity_hash)
+    def add_files_to_payload(link_mode, source_basepath, file_fixity_hash)
       file_fixity_hash.keys.each do |file_id|
         source_pathname = source_basepath.join(file_id)
         target_pathname = payload_pathname.join(file_id)
         copy_file(link_mode, source_pathname, target_pathname)
       end
-      write_manifest_checksums('manifest', file_fixity_hash)
+      write_manifest_checksums('manifest', add_data_prefix(file_fixity_hash))
       payload_pathname
+    end
+
+    # @param [Hash<String,FileFixity>] file_fixity_hash key is file_id, values are Fixity objects containing checksums
+    # @return [Hash<String,FileFixity>] A revised hash with file_id paths prefixed with 'data/'
+    def add_data_prefix(file_fixity_hash)
+      new_hash = Hash.new
+      file_fixity_hash.values.each do |fixity|
+        fixity.file_id = "data/#{fixity.file_id}"
+        new_hash[fixity.file_id] = fixity
+      end
+      new_hash
     end
 
     # @param [Symbol] link_mode Specifies whether to :copy, :link, or :symlink the files to the payload directory
@@ -135,7 +146,7 @@ module Replication
       tarfile.tarfile_basepath = payload_pathname
       tarfile.tarfile_fullpath = payload_pathname.join("#{tarfile_id}")
       tarfile.create_tarfile
-      file_fixity_hash = Fixity.generate_checksums(tarfile.tarfile_basepath,[tarfile.tarfile_fullpath],bag_checksum_types)
+      file_fixity_hash = Fixity.generate_checksums(payload_pathname,[tarfile.tarfile_fullpath],bag_checksum_types)
       write_manifest_checksums('manifest', file_fixity_hash)
       tarfile
     end
@@ -211,13 +222,18 @@ module Replication
 
     # @return [Hash<String,FileFixity>] create hash containing ids and checksums for all files in the bag's root directory
     def generate_tagfile_checksums
+      # get list of all files in the bag home dir, except those starting with 'tagmanifest'
       tagfiles = bag_pathname.children.reject{|file| file.basename.to_s.start_with?('tagmanifest')}
+      # generate checksums, using bag home dir as the base directory for file ids (per bagit spec)
       Fixity.generate_checksums(bag_pathname, tagfiles, bag_checksum_types )
     end
 
     # @return [Hash<String,FileFixity>] create hash containing ids and checksums for all files in the bag's payload
     def generate_payload_checksums
-      Fixity.generate_checksums(payload_pathname, nil, bag_checksum_types)
+      # get list of all files in the data directory
+      path_list = payload_pathname.find
+      # generate checksums, but use bag home dir as the base directory for file ids (per bagit spec)
+      Fixity.generate_checksums(bag_pathname, path_list, bag_checksum_types)
     end
 
     # @param [String] manifest_type The type of manifest file ('manifest' or 'tagmanifest') to be updated

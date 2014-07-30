@@ -99,7 +99,7 @@ module Replication
       path_list = base_pathname.find  if path_list.nil?
       file_fixity_hash = Hash.new
       path_list.select{|pathname| pathname.file?}.each  do |file|
-        file_fixity = Fixity.fixity_from_file(file, base_pathname)
+        file_fixity = Fixity.fixity_from_file(file, base_pathname, checksum_types)
         file_fixity_hash[file_fixity.file_id] = file_fixity
       end
       file_fixity_hash

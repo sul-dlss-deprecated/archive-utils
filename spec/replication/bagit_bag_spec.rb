@@ -116,14 +116,14 @@ describe 'Replication::BagitBag' do
     specify 'Replication::BagitBag#write_manifest_checksums' do
       manifest_type = 'manifest'
       source_basepath = @fixtures.join('moab-objects/jq937jp0017/v0003/data/content')
-      file_fixity_hash = Fixity.generate_checksums(source_basepath, nil,@bagit_bag.bag_checksum_types)
+      file_fixity_hash = Fixity.generate_checksums(source_basepath, source_basepath.find,@bagit_bag.bag_checksum_types)
       open_mode = 'w'
-      @bagit_bag.write_manifest_checksums(manifest_type, file_fixity_hash, open_mode)
+      @bagit_bag.write_manifest_checksums(manifest_type, @bagit_bag.add_data_prefix(file_fixity_hash), open_mode)
       manifest_fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
       checksum_hash =  Fixity.file_checksum_hash(manifest_fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({
-          "page-2.jpg" => {
+          "data/page-2.jpg" => {
                 :sha1 => "43ced73681687bc8e6f483618f0dcff7665e0ba7",
               :sha256 => "42c0cd1fe06615d8fdb8c2e3400d6fe38461310b4ecc252e1774e0c9e3981afa"
           }
@@ -138,26 +138,26 @@ describe 'Replication::BagitBag' do
     specify 'Replication::BagitBag#add_payload_dir' do
       link_mode = :copy
       source_dir = @fixtures.join('source-dir')
-      @bagit_bag.add_payload_dir(link_mode, source_dir)
+      @bagit_bag.add_dir_to_payload(link_mode, source_dir)
       expect(@bagit_bag.payload_pathname.children.size).to eq(4)
       manifest_type = 'manifest'
       fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
       checksum_hash =  Fixity.file_checksum_hash(fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({
-          "page-1.jpg" => {
+          "data/page-1.jpg" => {
                 :sha1 => "0616a0bd7927328c364b2ea0b4a79c507ce915ed",
               :sha256 => "b78cc53b7b8d9ed86d5e3bab3b699c7ed0db958d4a111e56b6936c8397137de0"
           },
-          "page-2.jpg" => {
+          "data/page-2.jpg" => {
                 :sha1 => "43ced73681687bc8e6f483618f0dcff7665e0ba7",
               :sha256 => "42c0cd1fe06615d8fdb8c2e3400d6fe38461310b4ecc252e1774e0c9e3981afa"
           },
-          "page-3.jpg" => {
+          "data/page-3.jpg" => {
                 :sha1 => "d0857baa307a2e9efff42467b5abd4e1cf40fcd5",
               :sha256 => "235de16df4804858aefb7690baf593fb572d64bb6875ec522a4eea1f4189b5f0"
           },
-          "page-4.jpg" => {
+          "data/page-4.jpg" => {
                 :sha1 => "c0ccac433cf02a6cee89c14f9ba6072a184447a2",
               :sha256 => "7bd120459eff0ecd21df94271e5c14771bfca5137d1dd74117b6a37123dfe271"
           }
@@ -173,27 +173,27 @@ describe 'Replication::BagitBag' do
     specify 'Replication::BagitBag#add_payload_files' do
       link_mode = :copy
       source_basepath = @fixtures.join('moab-objects/jq937jp0017/v0002/data')
-      file_fixity_hash = Fixity.generate_checksums(source_basepath, nil,@bagit_bag.bag_checksum_types)
-      @bagit_bag.add_payload_files(link_mode, source_basepath, file_fixity_hash)
+      file_fixity_hash = Fixity.generate_checksums(source_basepath, source_basepath.find,@bagit_bag.bag_checksum_types)
+      @bagit_bag.add_files_to_payload(link_mode, source_basepath, file_fixity_hash)
       expect(@bagit_bag.payload_pathname.find.select{|f| f.file?}.size).to eq(4)
       manifest_type = 'manifest'
       manifest_fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
       checksum_hash =  Fixity.file_checksum_hash(manifest_fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({
-                       "content/page-1.jpg" => {
+                       "data/content/page-1.jpg" => {
                 :sha1 => "0616a0bd7927328c364b2ea0b4a79c507ce915ed",
               :sha256 => "b78cc53b7b8d9ed86d5e3bab3b699c7ed0db958d4a111e56b6936c8397137de0"
           },
-             "metadata/contentMetadata.xml" => {
+             "data/metadata/contentMetadata.xml" => {
                 :sha1 => "c3961c0f619a81eaf8779a122219b1f860dbc2f9",
               :sha256 => "02b3bb1d059a705cb693bb2fe2550a8090b47cd3c32e823891b2071156485b73"
           },
-          "metadata/provenanceMetadata.xml" => {
+          "data/metadata/provenanceMetadata.xml" => {
                 :sha1 => "565473bbc865b1c6f88efc99b6b5b73fd5cadbc8",
               :sha256 => "ee62fdef9736ff12e394c3510f3d0a6ccd18bd5b1fb7e42fe46800d5934c9001"
           },
-             "metadata/versionMetadata.xml" => {
+             "data/metadata/versionMetadata.xml" => {
                 :sha1 => "65ea161b5bb5578ab4a06c4cd77fe3376f5adfa6",
               :sha256 => "291208b41c557a5fb15cc836ab7235dadbd0881096385cc830bb446b00d2eb6b"
           }
@@ -243,7 +243,7 @@ describe 'Replication::BagitBag' do
     specify 'Replication::BagitBag#write_bag_info_txt' do
       link_mode = :copy
       source_dir = @fixtures.join('source-dir')
-      @bagit_bag.add_payload_dir(link_mode, source_dir)
+      @bagit_bag.add_dir_to_payload(link_mode, source_dir)
       payload_size = @bagit_bag.bag_payload_size
       expect(payload_size).to eq({:bytes=>131029, :files=>4})
       expect(@bagit_bag.bag_size_human(payload_size[:bytes])).to eq("127.96 KB")
@@ -283,7 +283,7 @@ describe 'Replication::BagitBag' do
       @bagit_bag = BagitBag.create_bag(@bag_pathname)
       link_mode = :copy
       source_dir = @fixtures.join('source-dir')
-      @bagit_bag.add_payload_dir(link_mode, source_dir)
+      @bagit_bag.add_dir_to_payload(link_mode, source_dir)
       @bagit_bag.write_bag_info_txt
       @bagit_bag.write_manifest_checksums('tagmanifest', @bagit_bag.generate_tagfile_checksums)
     end
@@ -317,12 +317,12 @@ describe 'Replication::BagitBag' do
               :sha256 => "4227e88364c1f99ceb6aa9da763f5a9db345cb56d4a97ea56e5fb4e34e5123fd"
           },
                "manifest-sha1.txt" => {
-                :sha1 => "3cd966870d54c832bbb9e2846a79eb7200605ea1",
-              :sha256 => "91d5b3bdb42c06c6c609f61eaf6f3f1c58b3f5ffcebb105f998cc44db62536c9"
+                :sha1 => "e5d99e3800fbfa2629e163b8c1ac2de87a074350",
+              :sha256 => "b1f5a94ab6fb199aac8e1e1970a96e508bc26cea4598fa683cc99f881445fe41"
           },
              "manifest-sha256.txt" => {
-                :sha1 => "e881c66da8b2b9331cca56abd09a96df362aa8e5",
-              :sha256 => "27e3ed299705095bd11248a9770983bba33245481921f13396dfab661b83f875"
+                :sha1 => "8d9fb84cc55035e4d371c4408da894f3f436f7e2",
+              :sha256 => "5917df61589ad4b42cec0f0af36077a6f4c573ab6e85a69f6f4243b3b7f60be9"
           }
       })
     end
@@ -335,19 +335,19 @@ describe 'Replication::BagitBag' do
       checksum_hash = Fixity.file_checksum_hash(payload_fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({
-          "page-1.jpg" => {
+          "data/page-1.jpg" => {
                 :sha1 => "0616a0bd7927328c364b2ea0b4a79c507ce915ed",
               :sha256 => "b78cc53b7b8d9ed86d5e3bab3b699c7ed0db958d4a111e56b6936c8397137de0"
           },
-          "page-2.jpg" => {
+          "data/page-2.jpg" => {
                 :sha1 => "43ced73681687bc8e6f483618f0dcff7665e0ba7",
               :sha256 => "42c0cd1fe06615d8fdb8c2e3400d6fe38461310b4ecc252e1774e0c9e3981afa"
           },
-          "page-3.jpg" => {
+          "data/page-3.jpg" => {
                 :sha1 => "d0857baa307a2e9efff42467b5abd4e1cf40fcd5",
               :sha256 => "235de16df4804858aefb7690baf593fb572d64bb6875ec522a4eea1f4189b5f0"
           },
-          "page-4.jpg" => {
+          "data/page-4.jpg" => {
                 :sha1 => "c0ccac433cf02a6cee89c14f9ba6072a184447a2",
               :sha256 => "7bd120459eff0ecd21df94271e5c14771bfca5137d1dd74117b6a37123dfe271"
           }
@@ -364,19 +364,19 @@ describe 'Replication::BagitBag' do
       checksum_hash =  Fixity.file_checksum_hash(manifest_fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({
-          "page-1.jpg" => {
+          "data/page-1.jpg" => {
                 :sha1 => "0616a0bd7927328c364b2ea0b4a79c507ce915ed",
               :sha256 => "b78cc53b7b8d9ed86d5e3bab3b699c7ed0db958d4a111e56b6936c8397137de0"
           },
-          "page-2.jpg" => {
+          "data/page-2.jpg" => {
                 :sha1 => "43ced73681687bc8e6f483618f0dcff7665e0ba7",
               :sha256 => "42c0cd1fe06615d8fdb8c2e3400d6fe38461310b4ecc252e1774e0c9e3981afa"
           },
-          "page-3.jpg" => {
+          "data/page-3.jpg" => {
                 :sha1 => "d0857baa307a2e9efff42467b5abd4e1cf40fcd5",
               :sha256 => "235de16df4804858aefb7690baf593fb572d64bb6875ec522a4eea1f4189b5f0"
           },
-          "page-4.jpg" => {
+          "data/page-4.jpg" => {
                 :sha1 => "c0ccac433cf02a6cee89c14f9ba6072a184447a2",
               :sha256 => "7bd120459eff0ecd21df94271e5c14771bfca5137d1dd74117b6a37123dfe271"
           }
@@ -393,11 +393,11 @@ describe 'Replication::BagitBag' do
       bag_fixity_hash = @bagit_bag.generate_payload_checksums
       expect(@bagit_bag.manifest_diff(manifest_fixity_hash, bag_fixity_hash)).to eq({})
 
-      bag_fixity_hash["page-1.jpg"].checksums[:sha1] = "c0ccac433cf02a6cee89c14f9ba6072a184447a2"
+      bag_fixity_hash["data/page-1.jpg"].checksums[:sha1] = "c0ccac433cf02a6cee89c14f9ba6072a184447a2"
       diff = @bagit_bag.manifest_diff(manifest_fixity_hash, bag_fixity_hash)
       #ap diff
       expect(diff).to eq({
-          "page-1.jpg" => {
+          "data/page-1.jpg" => {
               :sha1 => {
                   "manifest" => "0616a0bd7927328c364b2ea0b4a79c507ce915ed",
                        "bag" => "c0ccac433cf02a6cee89c14f9ba6072a184447a2"
@@ -418,7 +418,7 @@ describe 'Replication::BagitBag' do
       bag_fixity_hash = @bagit_bag.generate_payload_checksums
       expect(@bagit_bag.verify_manifests('manifest',manifest_fixity_hash, bag_fixity_hash)).to eq(true)
 
-      bag_fixity_hash["page-1.jpg"].checksums[:sha1] = "c0ccac433cf02a6cee89c14f9ba6072a184447a2"
+      bag_fixity_hash["data/page-1.jpg"].checksums[:sha1] = "c0ccac433cf02a6cee89c14f9ba6072a184447a2"
       expect{@bagit_bag.verify_manifests('manifest',manifest_fixity_hash, bag_fixity_hash)
         }.to  raise_exception(/Failed manifest verification/)
     end
