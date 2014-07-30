@@ -146,7 +146,7 @@ module Replication
       tarfile.tarfile_basepath = payload_pathname
       tarfile.tarfile_fullpath = payload_pathname.join("#{tarfile_id}")
       tarfile.create_tarfile
-      file_fixity_hash = Fixity.generate_checksums(payload_pathname,[tarfile.tarfile_fullpath],bag_checksum_types)
+      file_fixity_hash = Fixity.generate_checksums(bag_pathname,[tarfile.tarfile_fullpath],bag_checksum_types)
       write_manifest_checksums('manifest', file_fixity_hash)
       tarfile
     end
