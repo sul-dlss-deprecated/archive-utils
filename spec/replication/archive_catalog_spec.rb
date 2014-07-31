@@ -13,14 +13,14 @@ describe 'ArchiveCatalog' do
     expect{ArchiveCatalog.get_item(:digital_objects,dpn_id)}.to raise_exception(/404/)
   end
 
-  specify "find_or_create_item" do
+  specify "add_or_update_item" do
     hash= {"digital_object_id"=>"druid:ab891cd4567",  "home_repository"=>"sdr"}
     match_uri = "#{ArchiveCatalog.root_uri}/digital_objects.json"
     FakeWeb.register_uri(:post, match_uri, :body => hash.to_json, :status => ["201", "Created"])
-    result = ArchiveCatalog.find_or_create_item(:digital_objects,hash)
+    result = ArchiveCatalog.add_or_update_item(:digital_objects,hash)
     expect(result).to eq(hash)
     FakeWeb.register_uri(:post, match_uri, :body =>hash.to_json, :status => ["400", "Bad Request"])
-    expect{ArchiveCatalog.find_or_create_item(:digital_objects,hash)}.to raise_exception(/400/)
+    expect{ArchiveCatalog.add_or_update_item(:digital_objects,hash)}.to raise_exception(/400/)
   end
 
   specify "update_item" do

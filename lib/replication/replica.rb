@@ -71,7 +71,7 @@ module Replication
     end
 
     # @return [Boolean] Update the replicas table of the Archive Catalog
-    def update_replica_data
+    def catalog_replica_data
       replica_data = {
           :replica_id => @replica_id,
           :home_repository => @home_repository,
@@ -80,7 +80,7 @@ module Replication
           :payload_fixity_type => @payload_fixity_type,
           :payload_fixity => @payload_fixity
       }
-      ArchiveCatalog.find_or_create_item(:replicas, replica_data)
+      ArchiveCatalog.add_or_update_item(:replicas, replica_data)
       true
     end
 

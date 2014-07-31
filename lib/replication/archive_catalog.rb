@@ -45,7 +45,7 @@ module Replication
       end
 
       # Get the item record from the specified table for the specified primary key.
-      # @param [String] table name of the database table
+      # @param [Symbol, String] table name of the database table
       # @param [String] id primary key for the item in the database table
       # @return [Hash] the row (in key,value hash) from the specified table for the specified identifier.
       #    Response body contains the item data in JSON format, which is converted to a hash.
@@ -62,14 +62,14 @@ module Replication
         end
       end
 
-      # Retrieve an existing database record or add a new one using the data provided.
-      # @param [String] table name of the database table
+      # update an existing database record or add a new one using the data provided in the hash.
+      # @param [Symbol, String] table name of the database table
       # @param [Hash] hash the item data to be added to the database table
       # @return [Hash] result containing the item data as if a GET were performed.
       #    The HTTP response code for success is 201 (Created).
       # @see http://en.wikipedia.org/wiki/POST_(HTTP)
       # @see http://tools.ietf.org/html/rfc2616#page-54
-      def find_or_create_item(table,hash)
+      def add_or_update_item(table,hash)
         payload = hash.to_json
         headers = {:content_type => :json, :accept => :json}
         # Don't raise RestClient::Exception but return the response
@@ -83,7 +83,7 @@ module Replication
       end
 
       # Update the database columns for the specified item using the hash data.
-      # @param [String] table name of the database table
+      # @param [Symbol, String] table name of the database table
       # @param [String] id primary key for the item in the database table
       # @param [Hash] hash the item data to be updated in the database table
       # @return (Boolean) true if the HTTP response code is 204, per specification for PATCH or PUT request types.

@@ -67,7 +67,7 @@ module Replication
     end
 
     # @return [Boolean] Update digital_objects and sdr_objects tables in Archive Catalog
-    def update_object_data
+    def catalog_object_data
 
       identity_metadata = parse_identity_metadata
       relationship_metadata = parse_relationship_metadata
@@ -86,8 +86,8 @@ module Replication
       }
 
       if version_id == 1
-        ArchiveCatalog.find_or_create_item(:digital_objects,digital_object_data)
-        ArchiveCatalog.find_or_create_item(:sdr_objects,sdr_object_data)
+        ArchiveCatalog.add_or_update_item(:digital_objects,digital_object_data)
+        ArchiveCatalog.add_or_update_item(:sdr_objects,sdr_object_data)
       else
         ArchiveCatalog.update_item(:sdr_objects, digital_object_id, sdr_object_data)
       end
@@ -96,7 +96,7 @@ module Replication
     end
 
     # @return [Boolean] Update sdr_object_versions and sdr_version_stats tables in Archive Catalog
-    def update_version_data
+    def catalog_version_data
 
       version_inventory = self.version_inventory
       sdr_object_version_data = {
@@ -105,7 +105,7 @@ module Replication
           :replica_id => composite_key,
           :ingest_date => version_inventory.inventory_datetime
       }
-      ArchiveCatalog.find_or_create_item(:sdr_object_versions, sdr_object_version_data)
+      ArchiveCatalog.add_or_update_item(:sdr_object_versions, sdr_object_version_data)
 
 
       content = version_inventory.group('content')
@@ -121,7 +121,7 @@ module Replication
           :metadata_bytes => metadata.byte_count,
           :metadata_blocks => metadata.block_count
       }
-      ArchiveCatalog.find_or_create_item(:sdr_version_stats, sdr_version_full)
+      ArchiveCatalog.add_or_update_item(:sdr_version_stats, sdr_version_full)
 
       version_additions = self.version_additions
       content = version_additions.group('content')
@@ -137,7 +137,7 @@ module Replication
           :metadata_bytes => metadata.byte_count,
           :metadata_blocks => metadata.block_count
       }
-      ArchiveCatalog.find_or_create_item(:sdr_version_stats, sdr_version_delta)
+      ArchiveCatalog.add_or_update_item(:sdr_version_stats, sdr_version_delta)
 
       true
     end

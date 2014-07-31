@@ -38,6 +38,7 @@ describe 'Replication::Replica' do
       expect(replica).to be_instance_of(Replica)
       expect(replica.replica_id).to eq(replica_id)
       expect(replica.home_repository).to eq(home_repository)
+      # noinspection RubyArgCount
       expect{Replica.new()}.to raise_exception(ArgumentError, /wrong number of arguments/)
     end
   
@@ -123,7 +124,7 @@ describe 'Replication::Replica' do
       expect(@replica.payload_fixity).to eq('4aaa02875f4f0690d19ae2d801a470cc71c093c07e7ba3859126c1f846517c1d')
     end
 
-    specify 'Replication::Replica#update_replica_data' do
+    specify 'Replication::Replica#catalog_replica_data' do
       replica = Replica.new(@replica_id,@home_repository)
       replica_data = {
           :replica_id => @replica_id,
@@ -133,8 +134,8 @@ describe 'Replication::Replica' do
           :payload_fixity_type => (replica.payload_fixity_type = 'sha256'),
           :payload_fixity => (replica.payload_fixity = '4aaa02875f4f0690d19ae2d801a470cc71c093c07e7ba3859126c1f846517c1d')
       }
-      expect(ArchiveCatalog).to receive(:find_or_create_item).with(:replicas, replica_data)
-      replica.update_replica_data
+      expect(ArchiveCatalog).to receive(:add_or_update_item).with(:replicas, replica_data)
+      replica.catalog_replica_data
     end
 
   end

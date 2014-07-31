@@ -76,8 +76,7 @@ describe 'Replication::SdrObjectVersion' do
       expect(vm).to eq({:governed_by=>"druid:wk434ht4838"})
     end
 
-    specify 'Replication::SdrObjectVersion#update_object_data' do
-
+    specify 'Replication::SdrObjectVersion#catalog_object_data' do
       digital_object_data = {
           :digital_object_id=>"druid:jq937jp0017",
           :home_repository=>"sdr"}
@@ -90,16 +89,16 @@ describe 'Replication::SdrObjectVersion' do
           :latest_version=>3}
 
       @sdr_object_version.version_id = 1
-      expect(ArchiveCatalog).to receive(:find_or_create_item).with(:digital_objects,digital_object_data)
-      expect(ArchiveCatalog).to receive(:find_or_create_item).with(:sdr_objects,sdr_object_data)
-      @sdr_object_version.update_object_data
+      expect(ArchiveCatalog).to receive(:add_or_update_item).with(:digital_objects,digital_object_data)
+      expect(ArchiveCatalog).to receive(:add_or_update_item).with(:sdr_objects,sdr_object_data)
+      @sdr_object_version.catalog_object_data
 
       sdr_object_version_2 = SdrObjectVersion.new(@sdr_object, 2)
       expect(ArchiveCatalog).to receive(:update_item).with(:sdr_objects, @druid, sdr_object_data)
-      sdr_object_version_2.update_object_data
+      sdr_object_version_2.catalog_object_data
     end
 
-    specify 'Replication::SdrObjectVersion#update_version_data' do
+    specify 'Replication::SdrObjectVersion#catalog_version_data' do
       sdr_object_version_data = {
           :sdr_object_id=>"druid:jq937jp0017",
            :sdr_version_id=>2,
@@ -129,11 +128,10 @@ describe 'Replication::SdrObjectVersion' do
           :metadata_blocks=>4}
 
       sdr_object_version = SdrObjectVersion.new(@sdr_object,2)
-      expect(ArchiveCatalog).to receive(:find_or_create_item).with(:sdr_object_versions,sdr_object_version_data)
-      expect(ArchiveCatalog).to receive(:find_or_create_item).with(:sdr_version_stats, sdr_version_full)
-      expect(ArchiveCatalog).to receive(:find_or_create_item).with(:sdr_version_stats, sdr_version_delta)
-      sdr_object_version.update_version_data
-
+      expect(ArchiveCatalog).to receive(:add_or_update_item).with(:sdr_object_versions,sdr_object_version_data)
+      expect(ArchiveCatalog).to receive(:add_or_update_item).with(:sdr_version_stats, sdr_version_full)
+      expect(ArchiveCatalog).to receive(:add_or_update_item).with(:sdr_version_stats, sdr_version_delta)
+      sdr_object_version.catalog_version_data
     end
 
     # Unit test for method: {Replication::SdrObjectVersion#replica}
@@ -145,10 +143,6 @@ describe 'Replication::SdrObjectVersion' do
       expect(replica.replica_id).to eq('jq937jp0017-v0001')
       expect(replica.home_repository).to eq('sdr')
       expect(replica.bag_pathname).to eq(Replica.replica_cache_pathname.join("sdr/jq937jp0017-v0001"))
-       
-      # def replica
-      #   @replica ||= Replica.new(@replica_id, 'sdr')
-      # end
     end
     
     # Unit test for method: {Replication::SdrObjectVersion#moab_to_replica_bag}

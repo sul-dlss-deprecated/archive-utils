@@ -233,7 +233,7 @@ describe 'Replication::BagitBag' do
       manifest_fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
       checksum_hash =  Fixity.file_checksum_hash(manifest_fixity_hash)
       #ap checksum_hash
-      expect(checksum_hash.keys.first).to eq(tarfile_id)
+      expect(checksum_hash.keys.first).to eq("data/#{tarfile_id}")
       expect(checksum_hash.values.first.keys).to eq(@bagit_bag.bag_checksum_types)
     end
     
