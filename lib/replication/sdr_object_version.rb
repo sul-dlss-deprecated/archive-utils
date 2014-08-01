@@ -79,9 +79,9 @@ module Replication
 
       sdr_object_data = {
           :sdr_object_id => digital_object_id,
-          :object_type => identity_metadata[:object_type][0..19],
-          :object_label => identity_metadata[:object_label][0..99],
-          :governing_object => relationship_metadata[:governed_by],
+          :object_type => identity_metadata[:object_type].to_s[0..19],
+          :object_label => identity_metadata[:object_label].to_s[0..99],
+          :governing_object => relationship_metadata[:governed_by].to_s,
           :latest_version => storage_object.current_version_id
       }
 
