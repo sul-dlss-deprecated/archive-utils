@@ -79,8 +79,8 @@ module Replication
 
       sdr_object_data = {
           :sdr_object_id => digital_object_id,
-          :object_type => identity_metadata[:object_type],
-          :object_label => identity_metadata[:object_label],
+          :object_type => identity_metadata[:object_type][0..19],
+          :object_label => identity_metadata[:object_label][0..99],
           :governing_object => relationship_metadata[:governed_by],
           :latest_version => storage_object.current_version_id
       }
@@ -110,13 +110,14 @@ module Replication
 
       content = version_inventory.group('content')
       metadata = version_inventory.group('metadata')
+      raise "No metadata group found in version inventory" unless metadata
       sdr_version_full = {
           :sdr_object_id => digital_object_id,
           :sdr_version_id => version_id,
           :inventory_type => 'full',
-          :content_files => content.file_count,
-          :content_bytes => content.byte_count,
-          :content_blocks => content.block_count,
+          :content_files => (content ? content.file_count : 0),
+          :content_bytes => (content ? content.byte_count : 0),
+          :content_blocks => (content ? content.block_count : 0),
           :metadata_files => metadata.file_count,
           :metadata_bytes => metadata.byte_count,
           :metadata_blocks => metadata.block_count
@@ -126,13 +127,14 @@ module Replication
       version_additions = self.version_additions
       content = version_additions.group('content')
       metadata = version_additions.group('metadata')
+      raise "No metadata group found in version additions" unless metadata
       sdr_version_delta = {
           :sdr_object_id => digital_object_id,
           :sdr_version_id => version_id,
           :inventory_type => 'delta',
-          :content_files => content.file_count,
-          :content_bytes => content.byte_count,
-          :content_blocks => content.block_count,
+          :content_files => (content ? content.file_count : 0),
+          :content_bytes => (content ? content.byte_count : 0),
+          :content_blocks => (content ? content.block_count : 0),
           :metadata_files => metadata.file_count,
           :metadata_bytes => metadata.byte_count,
           :metadata_blocks => metadata.block_count
