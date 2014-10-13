@@ -176,7 +176,7 @@ jq937jp0017/v0003/data/metadata/contentMetadata.xml
 jq937jp0017/v0003/data/metadata/provenanceMetadata.xml
 jq937jp0017/v0003/data/metadata/versionMetadata.xml
 jq937jp0017/v0003/data/content/page-2.jpg
-      EOF
+EOF
       )
     end
 
