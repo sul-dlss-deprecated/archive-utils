@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   #s.add_dependency 'moab-versioning', '~> 1.3'
   #s.add_dependency 'rest-client'
 
+  s.add_development_dependency 'pry'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'awesome_print'
   s.add_development_dependency 'equivalent-xml'
