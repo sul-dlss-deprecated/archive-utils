@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__),'../libdir')
-require 'sdr_replication'
+require 'archive-utils'
 
-module Replication
+module Archive
 
   # The fixity properties of a file, used to determine file content equivalence.
   # Placing this data in a class by itself facilitates using the MD5, SHA1, etc checksums (and optionally the file size)

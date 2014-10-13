@@ -5,8 +5,10 @@ require 'equivalent-xml'
 require 'fakeweb'
 require 'simplecov'
 SimpleCov.start
-require 'sdr_replication'
-require 'spec_config'
+require 'archive-utils'
+
+# TODO: revise the config, so it doesn't use Moab-versioning gem
+#require 'spec_config'
 
 #require File.join(File.dirname(__FILE__),'../lib/libdir')
 

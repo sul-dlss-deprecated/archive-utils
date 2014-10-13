@@ -8,16 +8,16 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Darren Weber', 'Richard Anderson']
   s.email       = ['darren.weber@stanford.edu']
-  s.summary     = 'Ruby utilities for archival data (BagIt, Fixity, Tarfile).'
+  s.summary     = 'Ruby utilities for data archival (BagIt, Fixity, Tarfile).'
   s.description = 'Contains classes to archive and retrieve digital object version content and metadata'
 
   s.required_rubygems_version = '>= 2.2.1'
 
   # Runtime dependencies
   s.add_dependency 'json_pure'
-  s.add_dependency 'moab-versioning', '~> 1.3'
   s.add_dependency 'systemu'
-  s.add_dependency 'rest-client'
+  #s.add_dependency 'moab-versioning', '~> 1.3'
+  #s.add_dependency 'rest-client'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'awesome_print'

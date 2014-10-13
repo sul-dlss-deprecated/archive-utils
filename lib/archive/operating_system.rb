@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__),'../libdir')
-require 'sdr_replication'
+require 'archive-utils'
 
-module Replication
+module Archive
 
   # A wrapper class around the systemu gem that is used for shelling out to the operating system
   # and executing a command

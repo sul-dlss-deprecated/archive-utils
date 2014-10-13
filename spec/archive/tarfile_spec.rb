@@ -1,8 +1,8 @@
 require_relative '../spec_helper'
 
-# Unit tests for class {Replication::Tarfile}
-describe 'Replication::Tarfile' do
-  
+# Unit tests for class {Archive::Tarfile}
+describe 'Archive::Tarfile' do
+
   before(:all) do
     @tmpdir = Pathname(Dir.mktmpdir("tarfile"))
   end
@@ -12,13 +12,13 @@ describe 'Replication::Tarfile' do
   end
 
   describe '=========================== CONSTRUCTOR ===========================' do
-    
-    # Unit test for constructor: {Replication::Tarfile#initialize}
-    # Which returns an instance of: [Replication::Tarfile]
+
+    # Unit test for constructor: {Archive::Tarfile#initialize}
+    # Which returns an instance of: [Archive::Tarfile]
     # For input parameters:
-    # * options [Hash<Symbol,Object>] = Key,Value pairs specifying initial values of attributes 
-    specify 'Replication::Tarfile#initialize' do
-       
+    # * options [Hash<Symbol,Object>] = Key,Value pairs specifying initial values of attributes
+    specify 'Archive::Tarfile#initialize' do
+
       # test initialization with required parameters (if any)
       tarfile = Tarfile.new
       expect(tarfile).to be_instance_of(Tarfile)
@@ -38,101 +38,101 @@ describe 'Replication::Tarfile' do
       expect(tarfile.verify).to eq(true)
       expect(tarfile.multi_volume).to eq(true)
     end
-  
+
   end
-  
+
   describe '=========================== INSTANCE ATTRIBUTES ===========================' do
-    
+
     before(:all) do
       @tarfile = Tarfile.new
     end
-    
-    # Unit test for attribute: {Replication::Tarfile#format}
+
+    # Unit test for attribute: {Archive::Tarfile#format}
     # Which stores: [String] create archive of the specified format
-    specify 'Replication::Tarfile#format' do
+    specify 'Archive::Tarfile#format' do
       value = 'Test format'
       @tarfile.format = value
       expect(@tarfile.format).to eq(value)
     end
-    
-    # Unit test for attribute: {Replication::Tarfile#dereference}
+
+    # Unit test for attribute: {Archive::Tarfile#dereference}
     # Which stores: [Boolean] Follow symlinks and archive the files they point to
-    specify 'Replication::Tarfile#dereference' do
+    specify 'Archive::Tarfile#dereference' do
       value = :maybe
       @tarfile.dereference= value
       expect(@tarfile.dereference).to eq(value)
     end
-    
-    # Unit test for attribute: {Replication::Tarfile#verify}
+
+    # Unit test for attribute: {Archive::Tarfile#verify}
     # Which stores: [Boolean] Verify that files were copied faithfully
-    specify 'Replication::Tarfile#verify' do
+    specify 'Archive::Tarfile#verify' do
       value = :maybe
       @tarfile.verify= value
       expect(@tarfile.verify).to eq(value)
     end
-    
-    # Unit test for attribute: {Replication::Tarfile#multi_volume}
+
+    # Unit test for attribute: {Archive::Tarfile#multi_volume}
     # Which stores: [Boolean] Create/list/extract multi-volume archive (not yet implemented)
-    specify 'Replication::Tarfile#multi_volume' do
+    specify 'Archive::Tarfile#multi_volume' do
       value = :maybe
       @tarfile.multi_volume= value
       expect(@tarfile.multi_volume).to eq(value)
     end
 
-    # Unit test for method: {Replication::Tarfile#tarfile_basepath}
+    # Unit test for method: {Archive::Tarfile#tarfile_basepath}
     # Which returns: [Pathname] The full path of the ancestor dir in which the tar file resides
     # For input parameters: (None)
-    specify 'Replication::Tarfile#tarfile_basepath' do
+    specify 'Archive::Tarfile#tarfile_basepath' do
       basepath = Pathname.new('/test/basepath')
       @tarfile.tarfile_basepath=(basepath)
       expect(@tarfile.tarfile_basepath).to eq(basepath)
     end
 
-    # Unit test for method: {Replication::Tarfile#tarfile_fullpath}
+    # Unit test for method: {Archive::Tarfile#tarfile_fullpath}
     # Which returns: [Pathname] the full path of the tar archive file to be created or extracted from
     # For input parameters: (None)
-    specify 'Replication::Tarfile#tarfile_fullpath' do
+    specify 'Archive::Tarfile#tarfile_fullpath' do
       fullpath = Pathname.new('/test/fullpath')
       @tarfile.tarfile_fullpath=(fullpath)
       expect(@tarfile.tarfile_fullpath).to eq(fullpath)
     end
-    
-    # Unit test for method: {Replication::Tarfile#tarfile_relative_path}
+
+    # Unit test for method: {Archive::Tarfile#tarfile_relative_path}
     # Which returns: [String] The id (path relative to basepath) of the tar file
     # For input parameters: (None)
-    specify 'Replication::Tarfile#tarfile_relative_path' do
+    specify 'Archive::Tarfile#tarfile_relative_path' do
       @tarfile.tarfile_basepath=("/my/base")
       @tarfile.tarfile_fullpath=("/my/base/relative/path")
       expect(@tarfile.tarfile_relative_path.to_s).to eq('relative/path')
     end
-    
-    # Unit test for method: {Replication::Tarfile#source_fullpath}
+
+    # Unit test for method: {Archive::Tarfile#source_fullpath}
     # Which returns: [Pathname] The full path of the source file or directory being archived
     # For input parameters: (None)
-    specify 'Replication::Tarfile#source_fullpath' do
+    specify 'Archive::Tarfile#source_fullpath' do
       source = Pathname.new('/test/source')
       @tarfile.source_fullpath=(source)
       expect(@tarfile.source_fullpath).to eq(source)
     end
-    
-    # Unit test for method: {Replication::Tarfile#source_basepath}
+
+    # Unit test for method: {Archive::Tarfile#source_basepath}
     # Which returns: [Pathname] The directory that is the basis of relative paths
     # For input parameters: (None)
-    specify 'Replication::Tarfile#source_basepath' do
+    specify 'Archive::Tarfile#source_basepath' do
       base = Pathname.new('/test/base')
       @tarfile.source_basepath=(base)
       expect(@tarfile.source_basepath).to eq(base)
     end
 
-    # Unit test for method: {Replication::Tarfile#source_relative_path}
+    # Unit test for method: {Archive::Tarfile#source_relative_path}
     # Which returns: [Pathname] The relative path from the source base directory to the source directory
     # For input parameters: (None)
-    specify 'Replication::Tarfile#source_relative_path' do
+    specify 'Archive::Tarfile#source_relative_path' do
       @tarfile.source_basepath=('/my/base')
       @tarfile.source_fullpath=('/my/base/relative/path')
       expect(@tarfile.source_relative_path.to_s).to  eq('relative/path')
     end
-    
+
   end
 
   describe '=========================== INSTANCE METHODS ===========================' do
@@ -145,19 +145,19 @@ describe 'Replication::Tarfile' do
       @tarfile.source_fullpath=@fixtures.join('moab-objects/jq937jp0017/v0003')
     end
 
-    # Unit test for method: {Replication::Tarfile#create_cmd}
+    # Unit test for method: {Archive::Tarfile#create_cmd}
     # Which returns: [String] The shell command string to be used to create the tarfile
     # For input parameters: (None)
-    specify 'Replication::Tarfile#create_cmd' do
+    specify 'Archive::Tarfile#create_cmd' do
       expect(@tarfile.create_cmd).to eq(
          "tar --create --file=#{@tmpdir.join('jq937jp0017-v0003.tar')} --format=posix --dereference --directory='#{@tarfile.source_basepath}' jq937jp0017/v0003"
       )
     end
-    
-    # Unit test for method: {Replication::Tarfile#create_tarfile}
+
+    # Unit test for method: {Archive::Tarfile#create_tarfile}
     # Which returns: [Tarfile] Shell out to the operating system and create the tar archive file
     # For input parameters: (None)
-    specify 'Replication::Tarfile#create_tarfile' do
+    specify 'Archive::Tarfile#create_tarfile' do
       @tarfile.create_tarfile
       expect(@tarfile.list_cmd).to eq("tar --list --file=#{@tmpdir.join('jq937jp0017-v0003.tar')} ")
       #puts @tarfile.list_tarfile
@@ -180,7 +180,7 @@ jq937jp0017/v0003/data/content/page-2.jpg
       )
     end
 
-    specify 'Replication::Tarfile#extract_tarfile' do
+    specify 'Archive::Tarfile#extract_tarfile' do
       target = @tmpdir.join('extract_dir')
       target.mkpath
       @tarfile.target_pathname = target

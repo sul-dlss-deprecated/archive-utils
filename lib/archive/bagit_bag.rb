@@ -1,9 +1,9 @@
 require File.join(File.dirname(__FILE__),'../libdir')
-require 'sdr_replication'
+require 'archive-utils'
 
-module Replication
+module Archive
 
-  # A BagIt bag contains a structured copy of a digital object for storage, transfer, or replication
+  # A BagIt bag contains a structured copy of a digital object for storage, transfer, or archive
   # @see https://tools.ietf.org/html/draft-kunze-bagit-10
   # This class can be used to create, parse, or validate a bag instance
   #

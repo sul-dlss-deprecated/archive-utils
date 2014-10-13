@@ -1,43 +1,43 @@
 require_relative '../spec_helper'
 
-# Unit tests for class {Replication::Fixity}
-describe 'Replication::Fixity' do
-  
+# Unit tests for class {Archive::Fixity}
+describe 'Archive::Fixity' do
+
   describe '=========================== CLASS METHODS ===========================' do
-    
-    # Unit test for method: {Replication::Fixity.default_checksum_types}
+
+    # Unit test for method: {Archive::Fixity.default_checksum_types}
     # Which returns: [Array<Symbol>] The list of checksum types to be used when generating fixity data
     # For input parameters: (None)
-    specify 'Replication::Fixity.default_checksum_types' do
-      Replication::Fixity.default_checksum_types=[:md5,:sha384]
-      expect(Replication::Fixity.default_checksum_types).to eq([:md5,:sha384])
-      Replication::Fixity.default_checksum_types=[:sha1,:sha256]
-      expect(Replication::Fixity.default_checksum_types).to eq([:sha1,:sha256])
+    specify 'Archive::Fixity.default_checksum_types' do
+      Archive::Fixity.default_checksum_types=[:md5,:sha384]
+      expect(Archive::Fixity.default_checksum_types).to eq([:md5,:sha384])
+      Archive::Fixity.default_checksum_types=[:sha1,:sha256]
+      expect(Archive::Fixity.default_checksum_types).to eq([:sha1,:sha256])
     end
 
-    # Unit test for method: {Replication::Fixity.valid_checksum_types}
+    # Unit test for method: {Archive::Fixity.valid_checksum_types}
     # Which returns: [Array<ChecksumType>] The list of allowed ChecksumType structs containing the type's properties
     # For input parameters: (None)
-    specify 'Replication::Fixity.valid_checksum_types' do
-      expect(Replication::Fixity.valid_checksum_types.map{|type| type.id}).
-          to eq(Replication::Fixity.valid_checksum_ids)
+    specify 'Archive::Fixity.valid_checksum_types' do
+      expect(Archive::Fixity.valid_checksum_types.map{|type| type.id}).
+          to eq(Archive::Fixity.valid_checksum_ids)
     end
 
-    # Unit test for method: {Replication::Fixity.validate_checksum_types}
+    # Unit test for method: {Archive::Fixity.validate_checksum_types}
     # Which returns: [Object] The list of specified checksum types after being checked for validity
     # For input parameters:
-    # * types [Array<Symbol>] = The list of checksum types being specified by the caller 
-    specify 'Replication::Fixity.validate_checksum_types' do
-      expect{Replication::Fixity.validate_checksum_types([:dummy])}.to raise_error(/Invalid digest type/)
+    # * types [Array<Symbol>] = The list of checksum types being specified by the caller
+    specify 'Archive::Fixity.validate_checksum_types' do
+      expect{Archive::Fixity.validate_checksum_types([:dummy])}.to raise_error(/Invalid digest type/)
     end
-    
-    # Unit test for method: {Replication::Fixity.get_digesters}
+
+    # Unit test for method: {Archive::Fixity.get_digesters}
     # Which returns: [Array<Digest::Class>] The list of digest implementation objects that will generate the checksums
     # For input parameters:
-    # * checksum_types [Array<Symbol>] = The list of checksum types being specified by the caller 
-    specify 'Replication::Fixity.get_digesters' do
+    # * checksum_types [Array<Symbol>] = The list of checksum types being specified by the caller
+    specify 'Archive::Fixity.get_digesters' do
       checksum_types = [:md5,:sha1,:sha256,:sha384,:sha512]
-      digesters = Replication::Fixity.get_digesters(checksum_types)
+      digesters = Archive::Fixity.get_digesters(checksum_types)
 
       expect(digesters[:md5]).to be_instance_of(Digest::MD5)
       expect(digesters[:sha1]).to be_instance_of(Digest::SHA1)
@@ -52,25 +52,25 @@ describe 'Replication::Fixity' do
          "9b71d224bd62f3785d96d46ad3ea3d73319bfbc2890caadae2dff72519673ca72323c3d99ba5c11d7c7acc6e14b8c5da0c4663475c2e5c3adef46f73bcdec043")
 
       checksum_types = [:sha256]
-      digesters = Replication::Fixity.get_digesters(checksum_types)
+      digesters = Archive::Fixity.get_digesters(checksum_types)
       expect(digesters[:md5]).to eq(nil)
 
       checksum_types = [:dummy]
-      expect{Replication::Fixity.get_digesters(checksum_types)}.to raise_error(/Unrecognized checksum type/)
+      expect{Archive::Fixity.get_digesters(checksum_types)}.to raise_error(/Unrecognized checksum type/)
     end
-    
-    # Unit test for method: {Replication::Fixity.fixity_from_file}
+
+    # Unit test for method: {Archive::Fixity.fixity_from_file}
     # Which returns: [FileFixity] Generate a FileFixity instance containing fixity properties measured from of a physical file
     # For input parameters:
-    # * pathname [Pathname] = The location of the file to be digested 
-    # * base_pathname [Object] = The base directory from which relative paths (file IDS) will be derived 
-    # * checksum_types [Object] = The list of checksum types being specified by the caller (or default list) 
-    specify 'Replication::Fixity.fixity_from_file' do
+    # * pathname [Pathname] = The location of the file to be digested
+    # * base_pathname [Object] = The base directory from which relative paths (file IDS) will be derived
+    # * checksum_types [Object] = The list of checksum types being specified by the caller (or default list)
+    specify 'Archive::Fixity.fixity_from_file' do
       file_id = "source-dir/page-2.jpg"
       file_pathname = @fixtures.join(file_id)
       base_pathname = @fixtures
       checksum_types = [:md5,:sha1,:sha256]
-      fixity = Replication::Fixity.fixity_from_file(file_pathname, base_pathname, checksum_types)
+      fixity = Archive::Fixity.fixity_from_file(file_pathname, base_pathname, checksum_types)
       expect(fixity.file_id).to eq(file_id)
       #ap fixity.checksums
       expect(fixity.checksums).to eq({
@@ -87,12 +87,12 @@ describe 'Replication::Fixity' do
     end
 
 
-    # Unit test for method: {Replication::Fixity.generate_checksums}
+    # Unit test for method: {Archive::Fixity.generate_checksums}
     # Which returns: [Hash<String,FileFixity>] A hash containing file ids and fixity data derived from the actual files
     # For input parameters:
     # * base_pathname [Pathname] = The directory path used as the base for deriving relative paths (file IDs)
     # * path_list [Array<Pathname>] = The list of pathnames for files whose fixity will be generated
-    specify 'Replication::Fixity.generate_checksums' do
+    specify 'Archive::Fixity.generate_checksums' do
       source_basepath = @fixtures.join('source-dir')
       file_fixity_hash = Fixity.generate_checksums(source_basepath, source_basepath.find,[:sha1,:sha256])
       checksum_hash =  Fixity.file_checksum_hash(file_fixity_hash)
@@ -117,22 +117,22 @@ describe 'Replication::Fixity' do
       })
     end
 
-    # Unit test for method: {Replication::Fixity.type_for_length}
+    # Unit test for method: {Archive::Fixity.type_for_length}
     # Which returns: [ChecksumType] The ChecksumType struct that contains the properties of the matching checksum type
     # For input parameters:
-    # * length [Integer] = The length of the checksum value in hex format 
-    specify 'Replication::Fixity.type_for_length' do
+    # * length [Integer] = The length of the checksum value in hex format
+    specify 'Archive::Fixity.type_for_length' do
       lengths=[32,40,64,96,128]
-      ids = lengths.map{|len| Replication::Fixity.type_for_length(len).id}
+      ids = lengths.map{|len| Archive::Fixity.type_for_length(len).id}
       expect(ids).to eq([:md5, :sha1, :sha256, :sha384, :sha512])
     end
-    
-    # Unit test for method: {Replication::Fixity.fixity_from_checksum_values}
+
+    # Unit test for method: {Archive::Fixity.fixity_from_checksum_values}
     # Which returns: [FileFixity] Generate a FileFixity instance containing fixity properties supplied by the caller
     # For input parameters:
-    # * file_id [Object] = The filename or relative path of the file from its base directory 
-    # * checksum_values [Object] = The digest values of the file 
-    specify 'Replication::Fixity.fixity_from_checksum_values' do
+    # * file_id [Object] = The filename or relative path of the file from its base directory
+    # * checksum_values [Object] = The digest values of the file
+    specify 'Archive::Fixity.fixity_from_checksum_values' do
       file_id = "dummy"
       checksum_values = [
           "fe6e3ffa1b02ced189db640f68da0cc2",
@@ -147,7 +147,7 @@ describe 'Replication::Fixity' do
           :sha256 => "42c0cd1fe06615d8fdb8c2e3400d6fe38461310b4ecc252e1774e0c9e3981afa"
       })
     end
-  
+
   end
 
 end

@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__),'../libdir')
-require 'sdr_replication'
+require 'archive-utils'
 
-module Replication
+module Archive
 
   # A Struct to hold properties of a given checksum digest type
   ChecksumType = Struct.new(:id, :hex_length, :names)

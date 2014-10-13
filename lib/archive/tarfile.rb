@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__),'../libdir')
-require 'sdr_replication'
+require 'archive-utils'
 
-module Replication
+module Archive
 
   # A tar archive file containing a set of digital object files
   #
