@@ -168,7 +168,7 @@ describe 'Archive::Tarfile' do
       dir_fileset = dir_files.to_set
       #puts @tarfile.list_tarfile
       expect(@tarfile.list_cmd).to eq("tar --list --file=#{@tmpdir.join('jq937jp0017-v0003.tar')} ")
-      expect(dir_fileset.difference(tar_fileset).empty?).to be_true
+      expect(dir_fileset.difference(tar_fileset).empty?).to be true
     end
 
     specify 'Archive::Tarfile#extract_tarfile' do
