@@ -14,6 +14,7 @@ require 'systemu'
 module Archive
 end
 
+require 'archive/version'
 require 'archive/bagit_bag'
 require 'archive/file_fixity'
 require 'archive/fixity'
