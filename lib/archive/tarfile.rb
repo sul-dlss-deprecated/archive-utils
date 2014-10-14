@@ -26,13 +26,13 @@ module Archive
     # @param [Hash<Symbol,Object>] options Key,Value pairs specifying initial values of attributes
     # @return [Tarfile] Initialize a new Tarfile object
     def initialize(options=nil)
-      options={} if options.nil?
       # set defaults
       @format=:posix
       @dereference = true
       @verify = false
       @multi_volume = false
       # override defaults
+      options={} if options.nil?
       options.each do |key,value|
         #instance_variable_set("@#{key}", value)
         send "#{key}=", value

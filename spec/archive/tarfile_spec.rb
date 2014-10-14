@@ -159,25 +159,16 @@ describe 'Archive::Tarfile' do
     # For input parameters: (None)
     specify 'Archive::Tarfile#create_tarfile' do
       @tarfile.create_tarfile
-      expect(@tarfile.list_cmd).to eq("tar --list --file=#{@tmpdir.join('jq937jp0017-v0003.tar')} ")
+      tar_files = @tarfile.list_tarfile.split("\n").to_set
+      tar_fileset = tar_files.collect {|f| f.gsub(/\/$/,'')}.to_set
+      # get all the source files in the tar file source directory
+      dir_srcpath = File.join(@tarfile.source_basepath,'')
+      dir_files = Dir.glob(File.join(@tarfile.source_fullpath.to_s, '**','*'))
+      dir_files.each {|f| f.sub!(dir_srcpath,'') }
+      dir_fileset = dir_files.to_set
       #puts @tarfile.list_tarfile
-      expect(@tarfile.list_tarfile).to eq(<<-EOF
-jq937jp0017/v0003/
-jq937jp0017/v0003/data/
-jq937jp0017/v0003/manifests/
-jq937jp0017/v0003/manifests/fileInventoryDifference.xml
-jq937jp0017/v0003/manifests/manifestInventory.xml
-jq937jp0017/v0003/manifests/signatureCatalog.xml
-jq937jp0017/v0003/manifests/versionAdditions.xml
-jq937jp0017/v0003/manifests/versionInventory.xml
-jq937jp0017/v0003/data/content/
-jq937jp0017/v0003/data/metadata/
-jq937jp0017/v0003/data/metadata/contentMetadata.xml
-jq937jp0017/v0003/data/metadata/provenanceMetadata.xml
-jq937jp0017/v0003/data/metadata/versionMetadata.xml
-jq937jp0017/v0003/data/content/page-2.jpg
-EOF
-      )
+      expect(@tarfile.list_cmd).to eq("tar --list --file=#{@tmpdir.join('jq937jp0017-v0003.tar')} ")
+      expect(dir_fileset.difference(tar_fileset).empty?).to be_true
     end
 
     specify 'Archive::Tarfile#extract_tarfile' do
