@@ -3,7 +3,6 @@ require 'bundler/setup'
 Bundler.setup
 require 'digest'
 require 'find'
-require 'json/pure'
 require 'pathname'
 require 'systemu'
 

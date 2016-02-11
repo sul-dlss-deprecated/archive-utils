@@ -16,7 +16,6 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = '>= 2.2.1'
 
   # Runtime dependencies
-  s.add_dependency 'json_pure', '~> 1.8'
   s.add_dependency 'systemu', '~> 2.6'
   #s.add_dependency 'moab-versioning', '~> 1.3'
   #s.add_dependency 'rest-client'
