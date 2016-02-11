@@ -15,5 +15,4 @@ require 'archive/file_fixity'
 require 'archive/fixity'
 require 'archive/operating_system'
 require 'archive/tarfile'
-include Archive
 

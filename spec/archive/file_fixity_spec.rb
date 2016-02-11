@@ -11,11 +11,11 @@ describe 'Archive::FileFixity' do
     # * options [Hash<Symbol,Object>] = Key,Value pairs specifying initial values of attributes
     specify 'Archive::FileFixity#initialize' do
       options = {file_id: "myfile"}
-      ff = FileFixity.new(options)
-      expect(ff).to be_instance_of(FileFixity)
+      ff = Archive::FileFixity.new(options)
+      expect(ff).to be_instance_of(Archive::FileFixity)
       expect(ff.file_id).to eq(options[:file_id])
       expect(ff.checksums).to eq({})
-      expect{FileFixity.new({dummy: 'junk'})}.to raise_exception(NoMethodError, /undefined method/)
+      expect{Archive::FileFixity.new({dummy: 'junk'})}.to raise_exception(NoMethodError, /undefined method/)
     end
 
   end
@@ -23,7 +23,7 @@ describe 'Archive::FileFixity' do
   describe '=========================== INSTANCE ATTRIBUTES ===========================' do
 
     before(:all) do
-      @file_fixity = FileFixity.new
+      @file_fixity = Archive::FileFixity.new
     end
 
     # Unit test for attribute: {Archive::FileFixity#file_id}
@@ -55,7 +55,7 @@ describe 'Archive::FileFixity' do
   describe '=========================== INSTANCE METHODS ===========================' do
 
     before(:each) do
-      @file_fixity = FileFixity.new
+      @file_fixity = Archive::FileFixity.new
       @file_fixity.file_id = 'page-1.jpg'
       @file_fixity.bytes = 2225
       @sha1_value = '43ced73681687bc8e6f483618f0dcff7665e0ba7s'
@@ -87,9 +87,9 @@ describe 'Archive::FileFixity' do
     # Unit test for method: {Archive::FileFixity#eql?}
     # Which returns: [Boolean] Returns true if self and other have comparable fixity data.
     # For input parameters:
-    # * other [FileFixity] = The other file fixity being compared to this fixity
+    # * other [Archive::FileFixity] = The other file fixity being compared to this fixity
     specify 'Archive::FileFixity#eql?' do
-      ff2 = FileFixity.new
+      ff2 = Archive::FileFixity.new
       ff2.file_id = 'page-1.jpg'
       ff2.set_checksum(:sha1, @sha1_value)
       ff2.set_checksum(:sha256, @sha256_value)
@@ -101,9 +101,9 @@ describe 'Archive::FileFixity' do
     # Unit test for method: {Archive::FileFixity#==}
     # Which returns: [Boolean] Returns true if self and other have comparable fixity data.
     # For input parameters:
-    # * other [FileFixity] = The other file fixity being compared to this fixity
+    # * other [Archive::FileFixity] = The other file fixity being compared to this fixity
     specify 'Archive::FileFixity#==' do
-      ff2 = double(FileFixity)
+      ff2 = double(Archive::FileFixity)
       expect(@file_fixity).to receive(:eql?).with(ff2).and_return(false)
       expect(@file_fixity == ff2).to eq(false)
     end
@@ -119,7 +119,7 @@ describe 'Archive::FileFixity' do
     # Which returns: [Fixnum] Compute a hash-code for the fixity value array. Two file instances with the same content will have the same hash code (and will compare using eql?).
     # For input parameters: (None)
     specify 'Archive::FileFixity#diff' do
-      ff2 = FileFixity.new
+      ff2 = Archive::FileFixity.new
       ff2.file_id = 'page-1.jpg'
       ff2.set_checksum(:sha1, @sha1_value)
       ff2.set_checksum(:sha256, @sha256_value)

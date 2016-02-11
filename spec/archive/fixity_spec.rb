@@ -60,7 +60,7 @@ describe 'Archive::Fixity' do
     end
 
     # Unit test for method: {Archive::Fixity.fixity_from_file}
-    # Which returns: [FileFixity] Generate a FileFixity instance containing fixity properties measured from of a physical file
+    # Which returns: [Archive::FileFixity] Generate a Archive::FileFixity instance containing fixity properties measured from of a physical file
     # For input parameters:
     # * pathname [Pathname] = The location of the file to be digested
     # * base_pathname [Object] = The base directory from which relative paths (file IDS) will be derived
@@ -78,24 +78,24 @@ describe 'Archive::Fixity' do
             :sha1 => "43ced73681687bc8e6f483618f0dcff7665e0ba7",
           :sha256 => "42c0cd1fe06615d8fdb8c2e3400d6fe38461310b4ecc252e1774e0c9e3981afa"
       })
-      expect(Fixity.openssl_digest_command(:md5,file_pathname)).to eq("openssl dgst -md5 #{file_pathname}")
-      expect(Fixity.openssl_digest_command(:sha1,file_pathname)).to eq("openssl dgst -sha1 #{file_pathname}")
-      expect(Fixity.openssl_digest_command(:sha256,file_pathname)).to eq("openssl dgst -sha256 #{file_pathname}")
-      expect(Fixity.openssl_digest(:md5,file_pathname)).to eq(fixity.get_checksum(:md5))
-      expect(Fixity.openssl_digest(:sha1,file_pathname)).to eq(fixity.get_checksum(:sha1))
-      expect(Fixity.openssl_digest(:sha256,file_pathname)).to eq(fixity.get_checksum(:sha256))
+      expect(Archive::Fixity.openssl_digest_command(:md5,file_pathname)).to eq("openssl dgst -md5 #{file_pathname}")
+      expect(Archive::Fixity.openssl_digest_command(:sha1,file_pathname)).to eq("openssl dgst -sha1 #{file_pathname}")
+      expect(Archive::Fixity.openssl_digest_command(:sha256,file_pathname)).to eq("openssl dgst -sha256 #{file_pathname}")
+      expect(Archive::Fixity.openssl_digest(:md5,file_pathname)).to eq(fixity.get_checksum(:md5))
+      expect(Archive::Fixity.openssl_digest(:sha1,file_pathname)).to eq(fixity.get_checksum(:sha1))
+      expect(Archive::Fixity.openssl_digest(:sha256,file_pathname)).to eq(fixity.get_checksum(:sha256))
     end
 
 
     # Unit test for method: {Archive::Fixity.generate_checksums}
-    # Which returns: [Hash<String,FileFixity>] A hash containing file ids and fixity data derived from the actual files
+    # Which returns: [Hash<String,Archive::FileFixity>] A hash containing file ids and fixity data derived from the actual files
     # For input parameters:
     # * base_pathname [Pathname] = The directory path used as the base for deriving relative paths (file IDs)
     # * path_list [Array<Pathname>] = The list of pathnames for files whose fixity will be generated
     specify 'Archive::Fixity.generate_checksums' do
       source_basepath = @fixtures.join('source-dir')
-      file_fixity_hash = Fixity.generate_checksums(source_basepath, source_basepath.find,[:sha1,:sha256])
-      checksum_hash =  Fixity.file_checksum_hash(file_fixity_hash)
+      file_fixity_hash = Archive::Fixity.generate_checksums(source_basepath, source_basepath.find,[:sha1,:sha256])
+      checksum_hash =  Archive::Fixity.file_checksum_hash(file_fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({
           "page-1.jpg" => {
@@ -128,7 +128,7 @@ describe 'Archive::Fixity' do
     end
 
     # Unit test for method: {Archive::Fixity.fixity_from_checksum_values}
-    # Which returns: [FileFixity] Generate a FileFixity instance containing fixity properties supplied by the caller
+    # Which returns: [Archive::FileFixity] Generate a Archive::FileFixity instance containing fixity properties supplied by the caller
     # For input parameters:
     # * file_id [Object] = The filename or relative path of the file from its base directory
     # * checksum_values [Object] = The digest values of the file
@@ -138,7 +138,7 @@ describe 'Archive::Fixity' do
           "fe6e3ffa1b02ced189db640f68da0cc2",
           "43ced73681687bc8e6f483618f0dcff7665e0ba7",
           "42c0cd1fe06615d8fdb8c2e3400d6fe38461310b4ecc252e1774e0c9e3981afa"]
-      fixity = Fixity.fixity_from_checksum_values(file_id, checksum_values)
+      fixity = Archive::Fixity.fixity_from_checksum_values(file_id, checksum_values)
       expect(fixity.file_id).to eq(file_id)
       #ap fixity.checksums
       expect(fixity.checksums).to eq({

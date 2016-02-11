@@ -20,8 +20,8 @@ describe 'Archive::Tarfile' do
     specify 'Archive::Tarfile#initialize' do
 
       # test initialization with required parameters (if any)
-      tarfile = Tarfile.new
-      expect(tarfile).to be_instance_of(Tarfile)
+      tarfile = Archive::Tarfile.new
+      expect(tarfile).to be_instance_of(Archive::Tarfile)
       expect(tarfile.format).to eq(:posix)
       expect(tarfile.dereference).to eq(true)
       expect(tarfile.verify).to eq(false)
@@ -32,7 +32,7 @@ describe 'Archive::Tarfile' do
           verify: true,
           multi_volume: true
       }
-      tarfile = Tarfile.new(options)
+      tarfile = Archive::Tarfile.new(options)
       expect(tarfile.format).to eq(:gnu)
       expect(tarfile.dereference).to eq(false)
       expect(tarfile.verify).to eq(true)
@@ -44,7 +44,7 @@ describe 'Archive::Tarfile' do
   describe '=========================== INSTANCE ATTRIBUTES ===========================' do
 
     before(:all) do
-      @tarfile = Tarfile.new
+      @tarfile = Archive::Tarfile.new
     end
 
     # Unit test for attribute: {Archive::Tarfile#format}
@@ -138,7 +138,7 @@ describe 'Archive::Tarfile' do
   describe '=========================== INSTANCE METHODS ===========================' do
 
     before(:all) do
-      @tarfile = Tarfile.new
+      @tarfile = Archive::Tarfile.new
       @tarfile.tarfile_basepath=@tmpdir
       @tarfile.tarfile_fullpath=@tmpdir.join('jq937jp0017-v0003.tar')
       @tarfile.source_basepath=@fixtures.join('moab-objects')
@@ -155,7 +155,7 @@ describe 'Archive::Tarfile' do
     end
 
     # Unit test for method: {Archive::Tarfile#create_tarfile}
-    # Which returns: [Tarfile] Shell out to the operating system and create the tar archive file
+    # Which returns: [Archive::Tarfile] Shell out to the operating system and create the tar archive file
     # For input parameters: (None)
     specify 'Archive::Tarfile#create_tarfile' do
       @tarfile.create_tarfile
