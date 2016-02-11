@@ -6,10 +6,6 @@ require 'find'
 require 'pathname'
 require 'systemu'
 
-# Should remove these dependencies from sdr-archive
-#require 'moab_stanford'
-#require 'rest-client'
-
 module Archive
 end
 

@@ -17,8 +17,6 @@ Gem::Specification.new do |s|
 
   # Runtime dependencies
   s.add_dependency 'systemu', '~> 2.6'
-  #s.add_dependency 'moab-versioning', '~> 1.3'
-  #s.add_dependency 'rest-client'
 
   s.add_development_dependency 'pry', '~> 0'
   s.add_development_dependency 'rake', '~> 10'
