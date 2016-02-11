@@ -13,7 +13,7 @@ describe 'Archive::OperatingSystem' do
       command = 'echo "hello world!"'
       expect(Archive::OperatingSystem.execute(command)).to eq("hello world!\n")
       command = 'non-existent command'
-      expect{Archive::OperatingSystem.execute(command)}.to raise_error
+      expect{Archive::OperatingSystem.execute(command)}.to raise_error /Command failed to execute/
     end
 
   end
