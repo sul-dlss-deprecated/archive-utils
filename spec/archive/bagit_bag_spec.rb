@@ -14,12 +14,12 @@ describe 'Archive::BagitBag' do
   describe '=== CLASS METHODS ===' do
 
     # Unit test for method: {Archive::BagitBag.create_bag}
-    # Which returns: [BagitBag] Initialize a new empty bag
+    # Which returns: [Archive::BagitBag] Initialize a new empty bag
     # For input parameters: (None)
     # * pathname [Pathname, String] = The location of the bag home directory
     specify 'Archive::BagitBag#create_bag' do
       bag_dir = @tmpdir.join('create_me')
-      bag = BagitBag.create_bag(bag_dir)
+      bag = Archive::BagitBag.create_bag(bag_dir)
       expect(bag.payload_pathname).to eq(bag_dir.join('data'))
       expect(bag.payload_pathname.exist?).to eq(true)
       expect(bag.bag_pathname.join('bagit.txt').exist?).to eq(true)
@@ -27,19 +27,19 @@ describe 'Archive::BagitBag' do
     end
 
    # Unit test for method: {Archive::BagitBag.open_bag}
-    # Which returns: [BagitBag] Locate and verify existence of an existing bag
+    # Which returns: [Archive::BagitBag] Locate and verify existence of an existing bag
     # For input parameters: (None)
     # * pathname [Pathname, String] = The location of the bag home directory
     specify 'Archive::BagitBag#open_bag' do
       bag_dir = @tmpdir.join('open_me')
-      BagitBag.create_bag(bag_dir)
-      bag = BagitBag.open_bag(bag_dir)
+      Archive::BagitBag.create_bag(bag_dir)
+      bag = Archive::BagitBag.open_bag(bag_dir)
       expect(bag.payload_pathname).to eq(bag_dir.join('data'))
       expect(bag.payload_pathname.exist?).to eq(true)
       expect(bag.bag_pathname.join('bagit.txt').exist?).to eq(true)
       bag_dir.rmtree
 
-      expect{BagitBag.open_bag("/dummy/path")}.to raise_exception(RuntimeError, /No bag found/)
+      expect{Archive::BagitBag.open_bag("/dummy/path")}.to raise_exception(RuntimeError, /No bag found/)
     end
 
   end
@@ -49,7 +49,7 @@ describe 'Archive::BagitBag' do
     before(:each) do
       @bag_pathname = @tmpdir.join('mybag')
       @bag_pathname.rmtree if @bag_pathname.exist?
-      @bagit_bag = BagitBag.create_bag(@bag_pathname)
+      @bagit_bag = Archive::BagitBag.create_bag(@bag_pathname)
       @bagit_bag.bag_checksum_types = [:sha1, :sha256]
     end
 
@@ -94,7 +94,7 @@ describe 'Archive::BagitBag' do
     # Which returns: [Array<Symbol>] The list of checksum types to be used when generating fixity data
     # For input parameters: (None)
     specify 'Archive::BagitBag#bag_checksum_types' do
-      expect(@bagit_bag.bag_checksum_types).to eq(Fixity.default_checksum_types)
+      expect(@bagit_bag.bag_checksum_types).to eq(Archive::Fixity.default_checksum_types)
     end
 
     # Unit test for method: {Archive::BagitBag#bag_checksum_types=}
@@ -116,11 +116,11 @@ describe 'Archive::BagitBag' do
     specify 'Archive::BagitBag#write_manifest_checksums' do
       manifest_type = 'manifest'
       source_basepath = @fixtures.join('moab-objects/jq937jp0017/v0003/data/content')
-      file_fixity_hash = Fixity.generate_checksums(source_basepath, source_basepath.find,@bagit_bag.bag_checksum_types)
+      file_fixity_hash = Archive::Fixity.generate_checksums(source_basepath, source_basepath.find,@bagit_bag.bag_checksum_types)
       open_mode = 'w'
       @bagit_bag.write_manifest_checksums(manifest_type, @bagit_bag.add_data_prefix(file_fixity_hash), open_mode)
       manifest_fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
-      checksum_hash =  Fixity.file_checksum_hash(manifest_fixity_hash)
+      checksum_hash =  Archive::Fixity.file_checksum_hash(manifest_fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({
           "data/page-2.jpg" => {
@@ -142,7 +142,7 @@ describe 'Archive::BagitBag' do
       expect(@bagit_bag.payload_pathname.children.size).to eq(4)
       manifest_type = 'manifest'
       fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
-      checksum_hash =  Fixity.file_checksum_hash(fixity_hash)
+      checksum_hash =  Archive::Fixity.file_checksum_hash(fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({
           "data/page-1.jpg" => {
@@ -173,12 +173,12 @@ describe 'Archive::BagitBag' do
     specify 'Archive::BagitBag#add_payload_files' do
       link_mode = :copy
       source_basepath = @fixtures.join('moab-objects/jq937jp0017/v0002/data')
-      file_fixity_hash = Fixity.generate_checksums(source_basepath, source_basepath.find,@bagit_bag.bag_checksum_types)
+      file_fixity_hash = Archive::Fixity.generate_checksums(source_basepath, source_basepath.find,@bagit_bag.bag_checksum_types)
       @bagit_bag.add_files_to_payload(link_mode, source_basepath, file_fixity_hash)
       expect(@bagit_bag.payload_pathname.find.select{|f| f.file?}.size).to eq(4)
       manifest_type = 'manifest'
       manifest_fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
-      checksum_hash =  Fixity.file_checksum_hash(manifest_fixity_hash)
+      checksum_hash =  Archive::Fixity.file_checksum_hash(manifest_fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({
                        "data/content/page-1.jpg" => {
@@ -218,7 +218,7 @@ describe 'Archive::BagitBag' do
     end
 
     # Unit test for method: {Archive::BagitBag#add_payload_tarfile}
-    # Which returns: [Tarfile] Create a tar archive of a directory into the payload directory, generating checksums in parallel processes and recording those checksums in the payload manifests
+    # Which returns: [Archive::Tarfile] Create a tar archive of a directory into the payload directory, generating checksums in parallel processes and recording those checksums in the payload manifests
     # For input parameters:
     # * source_fullpath [Pathname, String] = The location of the directory whose content will be tarred
     # * source_basepath [Pathname, String] = The location of the directory to change to before doing the tar create
@@ -231,7 +231,7 @@ describe 'Archive::BagitBag' do
       expect(tarfile.tarfile_fullpath.exist?).to eq(true)
       manifest_type = 'manifest'
       manifest_fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
-      checksum_hash =  Fixity.file_checksum_hash(manifest_fixity_hash)
+      checksum_hash =  Archive::Fixity.file_checksum_hash(manifest_fixity_hash)
       #ap checksum_hash
       expect(checksum_hash.keys.first).to eq("data/#{tarfile_id}")
       expect(checksum_hash.values.first.keys).to eq(@bagit_bag.bag_checksum_types)
@@ -280,7 +280,7 @@ describe 'Archive::BagitBag' do
     before(:all) do
       @bag_pathname = @tmpdir.join('existing_bag')
       @bag_pathname.rmtree if @bag_pathname.exist?
-      @bagit_bag = BagitBag.create_bag(@bag_pathname)
+      @bagit_bag = Archive::BagitBag.create_bag(@bag_pathname)
       link_mode = :copy
       source_dir = @fixtures.join('source-dir')
       @bagit_bag.add_dir_to_payload(link_mode, source_dir)
@@ -301,11 +301,11 @@ describe 'Archive::BagitBag' do
     end
 
     # Unit test for method: {Archive::BagitBag#generate_tagfile_checksums}
-    # Which returns: [Hash<String,FileFixity>] create hash containing ids and checksums for all files in the bag's root directory
+    # Which returns: [Hash<String,Archive::FileFixity>] create hash containing ids and checksums for all files in the bag's root directory
     # For input parameters: (None)
     specify 'Archive::BagitBag#generate_tagfile_checksums' do
       tagfile_fixity_hash = @bagit_bag.generate_tagfile_checksums
-      checksum_hash = Fixity.file_checksum_hash(tagfile_fixity_hash)
+      checksum_hash = Archive::Fixity.file_checksum_hash(tagfile_fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({
                     "bag-info.txt" => {
@@ -328,11 +328,11 @@ describe 'Archive::BagitBag' do
     end
 
     # Unit test for method: {Archive::BagitBag#generate_payload_checksums}
-    # Which returns: [Hash<String,FileFixity>] create hash containing ids and checksums for all files in the bag's payload
+    # Which returns: [Hash<String,Archive::FileFixity>] create hash containing ids and checksums for all files in the bag's payload
     # For input parameters: (None)
     specify 'Archive::BagitBag#generate_payload_checksums' do
       payload_fixity_hash = @bagit_bag.generate_payload_checksums
-      checksum_hash = Fixity.file_checksum_hash(payload_fixity_hash)
+      checksum_hash = Archive::Fixity.file_checksum_hash(payload_fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({
           "data/page-1.jpg" => {
@@ -355,13 +355,13 @@ describe 'Archive::BagitBag' do
     end
 
     # Unit test for method: {Archive::BagitBag#read_manifest_files}
-    # Which returns: [Hash<String,FileFixity>] A hash containing file ids and fixity data derived from the manifest files
+    # Which returns: [Hash<String,Archive::FileFixity>] A hash containing file ids and fixity data derived from the manifest files
     # For input parameters:
     # * manifest_type [String] = The type of manifest file ('manifest' or 'tagmanifest') to be read
     specify 'Archive::BagitBag#read_manifest_files' do
       manifest_type = 'manifest'
       manifest_fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
-      checksum_hash =  Fixity.file_checksum_hash(manifest_fixity_hash)
+      checksum_hash =  Archive::Fixity.file_checksum_hash(manifest_fixity_hash)
       #ap checksum_hash
       expect(checksum_hash).to eq({
           "data/page-1.jpg" => {
@@ -386,8 +386,8 @@ describe 'Archive::BagitBag' do
     # Unit test for method: {Archive::BagitBag#manifest_diff}
     # Which returns: [Hash] A report of the differences between the fixity data from the manifest files against the values measured by digesting the files
     # For input parameters:
-    # * manifest_fixity_hash [Hash<String,FileFixity>] = A hash containing file ids and fixity data derived from the manifest files
-    # * bag_fixity_hash [Hash<String,FileFixity>] = A hash containing file ids and fixity data derived from the actual files
+    # * manifest_fixity_hash [Hash<String,Archive::FileFixity>] = A hash containing file ids and fixity data derived from the manifest files
+    # * bag_fixity_hash [Hash<String,Archive::FileFixity>] = A hash containing file ids and fixity data derived from the actual files
     specify 'Archive::BagitBag#manifest_diff' do
       manifest_fixity_hash =  @bagit_bag.read_manifest_files('manifest')
       bag_fixity_hash = @bagit_bag.generate_payload_checksums
@@ -411,8 +411,8 @@ describe 'Archive::BagitBag' do
     # Which returns: [Boolean] Compare fixity data from the manifest files against the values measured by digesting the files, returning true if equal or false if not equal
     # For input parameters:
     # * manifest_type [String] = The type of manifest file ('manifest' or 'tagmanifest') to be read
-    # * manifest_fixity_hash [Hash<String,FileFixity>] = A hash containing file ids and fixity data derived from the manifest files
-    # * bag_fixity_hash [Hash<String,FileFixity>] = A hash containing file ids and fixity data derived from the actual files
+    # * manifest_fixity_hash [Hash<String,Archive::FileFixity>] = A hash containing file ids and fixity data derived from the manifest files
+    # * bag_fixity_hash [Hash<String,Archive::FileFixity>] = A hash containing file ids and fixity data derived from the actual files
     specify 'Archive::BagitBag#verify_manifests' do
       manifest_fixity_hash =  @bagit_bag.read_manifest_files('manifest')
       bag_fixity_hash = @bagit_bag.generate_payload_checksums

@@ -16,17 +16,14 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = '>= 2.2.1'
 
   # Runtime dependencies
-  s.add_dependency 'json_pure', '~> 1.8'
   s.add_dependency 'systemu', '~> 2.6'
-  #s.add_dependency 'moab-versioning', '~> 1.3'
-  #s.add_dependency 'rest-client'
 
   s.add_development_dependency 'pry', '~> 0'
   s.add_development_dependency 'rake', '~> 10'
   s.add_development_dependency 'awesome_print', '~> 1'
   s.add_development_dependency 'equivalent-xml', '~> 0.5'
   s.add_development_dependency 'fakeweb', '~> 1'
-  s.add_development_dependency 'rspec', '~> 2.0'
+  s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'simplecov', '~> 0.7'
   s.add_development_dependency 'yard', '~> 0.8'
 

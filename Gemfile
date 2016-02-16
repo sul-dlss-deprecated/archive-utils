@@ -1,6 +1,5 @@
-
 # download gems from
-source "http://rubygems.org"
+source "https://rubygems.org"
 
 # Dependencies are defined in *.gemspec
 gemspec
