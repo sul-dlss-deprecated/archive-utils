@@ -4,7 +4,7 @@ $:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name        = 'archive-utils'
-  s.version     = '0.0.1'
+  s.version     = '0.1.0'
   s.licenses    = 'Apache-2.0'
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Darren Weber', 'Richard Anderson']
