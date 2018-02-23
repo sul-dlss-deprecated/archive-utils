@@ -1,4 +1,5 @@
 module Archive
+
   require 'digest'
 
   # A Struct to hold properties of a given checksum digest type
@@ -90,7 +91,7 @@ module Archive
       file_fixity
     end
 
-     # @param [Pathname] base_pathname The directory path used as the base for deriving relative paths (file IDs)
+    # @param [Pathname] base_pathname The directory path used as the base for deriving relative paths (file IDs)
     # @param [Array<Pathname>] path_list The list of pathnames for files whose fixity will be generated
     # @return [Hash<String,FileFixity>] A hash containing file ids and fixity data derived from the actual files
     def Fixity.generate_checksums(base_pathname, path_list, checksum_types=@@default_checksum_types)
