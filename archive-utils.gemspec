@@ -17,13 +17,15 @@ Gem::Specification.new do |s|
   # Runtime dependencies
   s.add_dependency 'systemu'
 
-  s.add_development_dependency 'pry'
-  s.add_development_dependency 'rake'
   s.add_development_dependency 'awesome_print'
+  s.add_development_dependency 'coveralls'
   s.add_development_dependency 'equivalent-xml'
   s.add_development_dependency 'fakeweb'
+  s.add_development_dependency 'pry'
+  s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
-  s.add_development_dependency 'coveralls'
+  s.add_development_dependency 'rubocop', '~> 0.52.1' # avoid code churn due to rubocop changes
+  s.add_development_dependency 'rubocop-rspec'
 
   s.files        = Dir.glob('lib/**/*')
   s.require_path = 'lib'

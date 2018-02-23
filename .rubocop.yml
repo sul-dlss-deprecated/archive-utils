@@ -1,0 +1,65 @@
+inherit_from: .rubocop_todo.yml
+
+# Turn on RSpec cops
+require: rubocop-rspec
+AllCops:
+  DisplayCopNames: true
+  Include:
+    - Rakefile
+  Exclude:
+    - Gemfile.lock
+    - '**/*.md'
+
+Bundler/OrderedGems:
+  Exclude:
+    - Gemfile
+
+# --- Layout ---
+
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: false
+
+# --- Lint ---
+
+# --- Metrics ---
+
+Metrics/LineLength:
+  Max: 120 #  this isn't 1994
+  Exclude:
+    - lib/archive/bagit_bag.rb
+    - lib/archive/fixity.rb
+    - lib/archive-utils.rb
+    - spec/archive/bagit_bag_spec.rb
+    - spec/archive/file_fixity_spec.rb
+    - spec/archive/fixity_spec.rb
+    - spec/archive/tarfile_spec.rb
+
+# --- Naming ---
+
+Naming/FileName:
+  Exclude:
+    - Gemfile
+    - archive-utils.gemspec
+    - lib/archive-utils.rb
+
+# --- Performance ---
+
+# --- RSpec ---
+
+# --- Style ---
+
+Style/StringLiterals:
+  Enabled: false # ' vs " isn't a big deal for readability or maintainability or execution time
+
+Style/SymbolArray:
+  Exclude:
+    - Rakefile # [:spec, :rubocop] isn't a big deal
