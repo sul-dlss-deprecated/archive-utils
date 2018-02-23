@@ -1,4 +1,5 @@
 module Archive
+
   require 'systemu'
 
   # A wrapper class around the systemu gem that is used for shelling out to the operating system

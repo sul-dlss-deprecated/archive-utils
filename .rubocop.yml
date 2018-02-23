@@ -38,9 +38,7 @@ Metrics/LineLength:
   Exclude:
     - lib/archive/bagit_bag.rb
     - lib/archive/fixity.rb
-    - lib/archive-utils.rb
     - spec/archive/bagit_bag_spec.rb
-    - spec/archive/file_fixity_spec.rb
     - spec/archive/fixity_spec.rb
     - spec/archive/tarfile_spec.rb
 
@@ -57,6 +55,11 @@ Naming/FileName:
 # --- RSpec ---
 
 # --- Style ---
+
+Style/Documentation:
+  Exclude:
+    - lib/archive/fixity.rb
+    - lib/archive/operating_system.rb
 
 Style/StringLiterals:
   Enabled: false # ' vs " isn't a big deal for readability or maintainability or execution time
