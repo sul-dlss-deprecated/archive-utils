@@ -9,6 +9,7 @@ AllCops:
   Exclude:
     - Gemfile.lock
     - '**/*.md'
+    - 'vendor/**/*' # travis puts gems here
 
 Bundler/OrderedGems:
   Exclude:
