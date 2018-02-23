@@ -1,6 +1,3 @@
-require File.join(File.dirname(__FILE__),'../libdir')
-require 'archive-utils'
-
 module Archive
 
   # A tar archive file containing a set of digital object files

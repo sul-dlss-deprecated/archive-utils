@@ -1,6 +1,3 @@
-require File.join(File.dirname(__FILE__),'../libdir')
-require 'archive-utils'
-
 module Archive
 
   # The fixity properties of a file, used to determine file content equivalence.

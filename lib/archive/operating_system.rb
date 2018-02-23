@@ -1,7 +1,5 @@
-require File.join(File.dirname(__FILE__),'../libdir')
-require 'archive-utils'
-
 module Archive
+  require 'systemu'
 
   # A wrapper class around the systemu gem that is used for shelling out to the operating system
   # and executing a command

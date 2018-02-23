@@ -1,10 +1,5 @@
-require 'digest'
-require 'find'
-require 'pathname'
-require 'systemu'
-
-module Archive
-end
+# require 'find'
+# require 'pathname'
 
 require 'archive/bagit_bag'
 require 'archive/file_fixity'

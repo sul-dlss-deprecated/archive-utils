@@ -1,6 +1,3 @@
-require File.join(File.dirname(__FILE__),'../libdir')
-require 'archive-utils'
-
 module Archive
 
   # A BagIt bag contains a structured copy of a digital object for storage, transfer, or archive

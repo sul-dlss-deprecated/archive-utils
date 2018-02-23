@@ -1,7 +1,5 @@
-require File.join(File.dirname(__FILE__),'../libdir')
-require 'archive-utils'
-
 module Archive
+  require 'digest'
 
   # A Struct to hold properties of a given checksum digest type
   ChecksumType = Struct.new(:id, :hex_length, :names)
