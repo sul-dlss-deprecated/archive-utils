@@ -1,6 +1,5 @@
 require_relative '../spec_helper'
 
-# Unit tests for class {Archive::Tarfile}
 describe 'Archive::Tarfile' do
 
   before(:all) do
@@ -198,7 +197,5 @@ describe 'Archive::Tarfile' do
           "jq937jp0017/v0003/manifests/versionInventory.xml"
       ])
     end
-
   end
-
 end

@@ -27,7 +27,5 @@ module Archive
       msg << " STDOUT = #{stdout.split($/).join('; ')}" if (stdout && (stdout.length > 0))
       raise msg
     end
-
   end
-
 end

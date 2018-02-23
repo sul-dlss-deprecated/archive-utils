@@ -1,6 +1,3 @@
-require 'rubygems'
-require 'bundler/setup'
-Bundler.setup
 require 'digest'
 require 'find'
 require 'pathname'
@@ -15,4 +12,3 @@ require 'archive/file_fixity'
 require 'archive/fixity'
 require 'archive/operating_system'
 require 'archive/tarfile'
-

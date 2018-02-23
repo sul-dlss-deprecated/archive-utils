@@ -419,8 +419,9 @@ describe 'Archive::BagitBag' do
       expect(@bagit_bag.verify_manifests('manifest',manifest_fixity_hash, bag_fixity_hash)).to eq(true)
 
       bag_fixity_hash["data/page-1.jpg"].checksums[:sha1] = "c0ccac433cf02a6cee89c14f9ba6072a184447a2"
-      expect{@bagit_bag.verify_manifests('manifest',manifest_fixity_hash, bag_fixity_hash)
-        }.to  raise_exception(/Failed manifest verification/)
+      expect{
+        @bagit_bag.verify_manifests('manifest',manifest_fixity_hash, bag_fixity_hash)
+      }.to raise_exception(/Failed manifest verification/)
     end
 
     # Unit test for method: {Archive::BagitBag#verify_tagfile_manifests}

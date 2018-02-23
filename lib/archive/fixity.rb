@@ -26,11 +26,11 @@ module Archive
     end
 
     @@valid_checksum_types = [
-        ChecksumType.new(:md5, 32, ['MD5']),
-        ChecksumType.new(:sha1, 40, ['SHA-1', 'SHA1']),
-        ChecksumType.new(:sha256, 64, ['SHA-256', 'SHA256']),
-        ChecksumType.new(:sha384, 96, ['SHA-384', 'SHA384']),
-        ChecksumType.new(:sha512, 128, ['SHA-512', 'SHA512'])
+      ChecksumType.new(:md5, 32, ['MD5']),
+      ChecksumType.new(:sha1, 40, ['SHA-1', 'SHA1']),
+      ChecksumType.new(:sha256, 64, ['SHA-256', 'SHA256']),
+      ChecksumType.new(:sha384, 96, ['SHA-384', 'SHA384']),
+      ChecksumType.new(:sha512, 128, ['SHA-512', 'SHA512'])
     ]
 
     # @return [Array<ChecksumType>] The list of allowed ChecksumType structs containing the type's properties
@@ -84,7 +84,7 @@ module Archive
       file_fixity.bytes = pathname.size
       digesters = Fixity.get_digesters(checksum_types)
       pathname.open("r") do |stream|
-        while buffer = stream.read(8192)
+        while (buffer = stream.read(8192))
           digesters.values.each { |digest| digest.update(buffer) }
         end
       end
@@ -96,7 +96,7 @@ module Archive
     # @param [Array<Pathname>] path_list The list of pathnames for files whose fixity will be generated
     # @return [Hash<String,FileFixity>] A hash containing file ids and fixity data derived from the actual files
     def Fixity.generate_checksums(base_pathname, path_list, checksum_types=@@default_checksum_types)
-      path_list = base_pathname.find  if path_list.nil?
+      path_list = base_pathname.find if path_list.nil?
       file_fixity_hash = Hash.new
       path_list.select{|pathname| pathname.file?}.each  do |file|
         file_fixity = Fixity.fixity_from_file(file, base_pathname, checksum_types)
@@ -149,7 +149,5 @@ module Archive
       checksum = stdout.scan(/[A-Za-z0-9]+/).last
       checksum
     end
-
   end
-
 end

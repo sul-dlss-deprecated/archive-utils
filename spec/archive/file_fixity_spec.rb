@@ -3,21 +3,15 @@ require_relative '../spec_helper'
 # Unit tests for class {Archive::FileFixity}
 describe 'Archive::FileFixity' do
 
-  describe '=========================== CONSTRUCTOR ===========================' do
-
-    # Unit test for constructor: {Archive::FileFixity#initialize}
-    # Which returns an instance of: [Archive::FileFixity]
-    # For input parameters:
-    # * options [Hash<Symbol,Object>] = Key,Value pairs specifying initial values of attributes
-    specify 'Archive::FileFixity#initialize' do
-      options = {file_id: "myfile"}
-      ff = Archive::FileFixity.new(options)
-      expect(ff).to be_instance_of(Archive::FileFixity)
-      expect(ff.file_id).to eq(options[:file_id])
-      expect(ff.checksums).to eq({})
-      expect{Archive::FileFixity.new({dummy: 'junk'})}.to raise_exception(NoMethodError, /undefined method/)
-    end
-
+  # For input parameters:
+  # * options [Hash<Symbol,Object>] = Key,Value pairs specifying initial values of attributes
+  specify 'Archive::FileFixity#initialize' do
+    options = {file_id: "myfile"}
+    ff = Archive::FileFixity.new(options)
+    expect(ff).to be_instance_of(Archive::FileFixity)
+    expect(ff.file_id).to eq(options[:file_id])
+    expect(ff.checksums).to eq({})
+    expect{Archive::FileFixity.new({dummy: 'junk'})}.to raise_exception(NoMethodError, /undefined method/)
   end
 
   describe '=========================== INSTANCE ATTRIBUTES ===========================' do
@@ -138,9 +132,6 @@ describe 'Archive::FileFixity' do
           }
       }
       )
-
     end
-
   end
-
 end

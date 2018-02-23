@@ -154,7 +154,5 @@ module Archive
       stdout = OperatingSystem.execute(command)
       stdout
     end
-
   end
-
 end

@@ -92,7 +92,5 @@ module Archive
       end
       return diff_hash.size > 0 ? diff_hash : nil
     end
-
   end
-
 end

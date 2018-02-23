@@ -52,8 +52,8 @@ module Archive
     def write_bagit_txt
       bagit_txt = bag_pathname.join("bagit.txt")
       bagit_txt.open('w') do |f|
-       f.puts "Tag-File-Character-Encoding: UTF-8"
-       f.puts "BagIt-Version: 0.97"
+        f.puts "Tag-File-Character-Encoding: UTF-8"
+        f.puts "BagIt-Version: 0.97"
       end
       bagit_txt
     end
@@ -166,7 +166,7 @@ module Archive
     # @return [Hash<Symbol,Integer>] A hash contining the payload size in bytes, and the number of files,
     #   derived from the payload directory contents
     def bag_payload_size
-      payload_pathname.find.select{|f| f.file?}.inject({bytes: 0, files: 0}) do |hash,file|
+      payload_pathname.find.select { |f| f.file? }.inject({ bytes: 0, files: 0 }) do |hash,file|
         hash[:bytes] += file.size
         hash[:files] += 1
         hash
@@ -223,7 +223,7 @@ module Archive
     # @return [Hash<String,FileFixity>] create hash containing ids and checksums for all files in the bag's root directory
     def generate_tagfile_checksums
       # get list of all files in the bag home dir, except those starting with 'tagmanifest'
-      tagfiles = bag_pathname.children.reject{|file| file.basename.to_s.start_with?('tagmanifest')}
+      tagfiles = bag_pathname.children.reject { |file| file.basename.to_s.start_with?('tagmanifest') }
       # generate checksums, using bag home dir as the base directory for file ids (per bagit spec)
       Fixity.generate_checksums(bag_pathname, tagfiles, bag_checksum_types )
     end
@@ -275,7 +275,7 @@ module Archive
       end
       self.bag_checksum_types = self.bag_checksum_types | checksum_type_list
       file_fixity_hash
-     end
+    end
 
     # @return [Boolean] Compare fixity data from the tag manifest files against the values measured by digesting the files
     def verify_tagfile_manifests
@@ -333,9 +333,8 @@ module Archive
 
     # @return [Boolean] Test the existence of expected files, return true if files exist, raise exception if not
     def verify_bag_structure
-      required_files = ['data','bagit.txt','bag-info.txt','manifest-sha256.txt','tagmanifest-sha256.txt']
-      required_files.each{|filename| verify_pathname(bag_pathname.join(filename))}
-      optional_files = []
+      required_files = ['data', 'bagit.txt', 'bag-info.txt', 'manifest-sha256.txt', 'tagmanifest-sha256.txt']
+      required_files.each { |filename| verify_pathname(bag_pathname.join(filename)) }
       true
     end
 
@@ -345,9 +344,5 @@ module Archive
       raise "#{pathname.basename} not found at #{pathname}" unless pathname.exist?
       true
     end
-
-
   end
-
-
 end
