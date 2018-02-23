@@ -121,7 +121,6 @@ describe 'Archive::BagitBag' do
       @bagit_bag.write_manifest_checksums(manifest_type, @bagit_bag.add_data_prefix(file_fixity_hash), open_mode)
       manifest_fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
       checksum_hash =  Archive::Fixity.file_checksum_hash(manifest_fixity_hash)
-      #ap checksum_hash
       expect(checksum_hash).to eq({
           "data/page-2.jpg" => {
                 :sha1 => "43ced73681687bc8e6f483618f0dcff7665e0ba7",
@@ -143,7 +142,6 @@ describe 'Archive::BagitBag' do
       manifest_type = 'manifest'
       fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
       checksum_hash =  Archive::Fixity.file_checksum_hash(fixity_hash)
-      #ap checksum_hash
       expect(checksum_hash).to eq({
           "data/page-1.jpg" => {
                 :sha1 => "0616a0bd7927328c364b2ea0b4a79c507ce915ed",
@@ -179,7 +177,6 @@ describe 'Archive::BagitBag' do
       manifest_type = 'manifest'
       manifest_fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
       checksum_hash =  Archive::Fixity.file_checksum_hash(manifest_fixity_hash)
-      #ap checksum_hash
       expect(checksum_hash).to eq({
                        "data/content/page-1.jpg" => {
                 :sha1 => "0616a0bd7927328c364b2ea0b4a79c507ce915ed",
@@ -249,7 +246,6 @@ describe 'Archive::BagitBag' do
       expect(@bagit_bag.bag_size_human(payload_size[:bytes])).to eq("127.96 KB")
       @bagit_bag.write_bag_info_txt
       properties=@bagit_bag.read_bag_info_txt
-      #ap properties
       expect(properties).to eq({
           "External-Identifier" => "mybag",
                  "Payload-Oxum" => "131029.4",
@@ -306,7 +302,6 @@ describe 'Archive::BagitBag' do
     specify 'Archive::BagitBag#generate_tagfile_checksums' do
       tagfile_fixity_hash = @bagit_bag.generate_tagfile_checksums
       checksum_hash = Archive::Fixity.file_checksum_hash(tagfile_fixity_hash)
-      #ap checksum_hash
       expect(checksum_hash).to eq({
                     "bag-info.txt" => {
                 :sha1 => "296fcefcad7327be9e644ac822aed9d7ff9781a1",
@@ -333,7 +328,6 @@ describe 'Archive::BagitBag' do
     specify 'Archive::BagitBag#generate_payload_checksums' do
       payload_fixity_hash = @bagit_bag.generate_payload_checksums
       checksum_hash = Archive::Fixity.file_checksum_hash(payload_fixity_hash)
-      #ap checksum_hash
       expect(checksum_hash).to eq({
           "data/page-1.jpg" => {
                 :sha1 => "0616a0bd7927328c364b2ea0b4a79c507ce915ed",
@@ -362,7 +356,6 @@ describe 'Archive::BagitBag' do
       manifest_type = 'manifest'
       manifest_fixity_hash = @bagit_bag.read_manifest_files(manifest_type)
       checksum_hash =  Archive::Fixity.file_checksum_hash(manifest_fixity_hash)
-      #ap checksum_hash
       expect(checksum_hash).to eq({
           "data/page-1.jpg" => {
                 :sha1 => "0616a0bd7927328c364b2ea0b4a79c507ce915ed",
@@ -395,7 +388,6 @@ describe 'Archive::BagitBag' do
 
       bag_fixity_hash["data/page-1.jpg"].checksums[:sha1] = "c0ccac433cf02a6cee89c14f9ba6072a184447a2"
       diff = @bagit_bag.manifest_diff(manifest_fixity_hash, bag_fixity_hash)
-      #ap diff
       expect(diff).to eq({
           "data/page-1.jpg" => {
               :sha1 => {

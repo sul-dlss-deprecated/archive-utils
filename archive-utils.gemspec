@@ -17,10 +17,7 @@ Gem::Specification.new do |s|
   # Runtime dependencies
   s.add_dependency 'systemu'
 
-  s.add_development_dependency 'awesome_print'
   s.add_development_dependency 'coveralls'
-  s.add_development_dependency 'equivalent-xml'
-  s.add_development_dependency 'fakeweb'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'

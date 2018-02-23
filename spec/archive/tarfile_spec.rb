@@ -177,7 +177,6 @@ describe 'Archive::Tarfile' do
       expect(@tarfile.extract_cmd).to eq("tar --extract --file=#{@tmpdir.join('jq937jp0017-v0003.tar')} --directory='#{target}' ")
       @tarfile.extract_tarfile
       filelist = target.find.map{|f| f.relative_path_from(target).to_s}
-      #ap filelist, options = {index: false}
       expect(filelist).to eq([
           ".",
           "jq937jp0017",

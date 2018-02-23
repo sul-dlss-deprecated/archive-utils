@@ -117,10 +117,8 @@ describe 'Archive::FileFixity' do
       ff2.file_id = 'page-1.jpg'
       ff2.set_checksum(:sha1, @sha1_value)
       ff2.set_checksum(:sha256, @sha256_value)
-      #ap @file_fixity.diff(ff2)
       expect(@file_fixity.diff(ff2)).to eq(nil)
       ff2.checksums.delete(:sha1)
-      #ap @file_fixity.diff(ff2)
       expect(@file_fixity.diff(ff2)).to eq({
           :sha1 => {
                "base" => "43ced73681687bc8e6f483618f0dcff7665e0ba7s",

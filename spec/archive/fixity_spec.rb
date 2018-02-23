@@ -77,7 +77,6 @@ describe 'Archive::Fixity' do
     checksum_types = [:md5,:sha1,:sha256]
     fixity = Archive::Fixity.fixity_from_file(file_pathname, base_pathname, checksum_types)
     expect(fixity.file_id).to eq(file_id)
-    #ap fixity.checksums
     expect(fixity.checksums).to eq({
            :md5 => "fe6e3ffa1b02ced189db640f68da0cc2",
           :sha1 => "43ced73681687bc8e6f483618f0dcff7665e0ba7",
@@ -101,7 +100,6 @@ describe 'Archive::Fixity' do
     source_basepath = @fixtures.join('source-dir')
     file_fixity_hash = Archive::Fixity.generate_checksums(source_basepath, source_basepath.find,[:sha1,:sha256])
     checksum_hash =  Archive::Fixity.file_checksum_hash(file_fixity_hash)
-    #ap checksum_hash
     expect(checksum_hash).to eq({
         "page-1.jpg" => {
               :sha1 => "0616a0bd7927328c364b2ea0b4a79c507ce915ed",
@@ -145,7 +143,6 @@ describe 'Archive::Fixity' do
         "42c0cd1fe06615d8fdb8c2e3400d6fe38461310b4ecc252e1774e0c9e3981afa"]
     fixity = Archive::Fixity.fixity_from_checksum_values(file_id, checksum_values)
     expect(fixity.file_id).to eq(file_id)
-    #ap fixity.checksums
     expect(fixity.checksums).to eq({
            :md5 => "fe6e3ffa1b02ced189db640f68da0cc2",
           :sha1 => "43ced73681687bc8e6f483618f0dcff7665e0ba7",

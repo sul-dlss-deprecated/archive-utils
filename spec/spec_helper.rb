@@ -3,9 +3,6 @@ ENV['RSPEC'] = "true"
 require 'coveralls'
 Coveralls.wear!
 
-require 'awesome_print'
-require 'equivalent-xml'
-require 'fakeweb'
 require 'archive-utils'
 
 # TODO: revise the config, so it doesn't use Moab-versioning gem
