@@ -8,7 +8,7 @@ module Archive
   # This class can be used to create, parse, or validate a bag instance
   #
   # @note Copyright (c) 2014 by The Board of Trustees of the Leland Stanford Junior University.
-  #   All rights reserved.  See {file:LICENSE.rdoc} for details.
+  #   All rights reserved.  See {file:LICENSE} for details.
   class BagitBag
 
     # @param [Pathname,String] pathname The location of the bag home directory
@@ -96,7 +96,7 @@ module Archive
     # @return [Pathname] Copy or link the files specified in the file_fixity_hash to the payload directory,
     #   then update the payload manifest files
     def add_files_to_payload(link_mode, source_basepath, file_fixity_hash)
-      file_fixity_hash.keys.each do |file_id|
+      file_fixity_hash.each_key do |file_id|
         source_pathname = source_basepath.join(file_id)
         target_pathname = payload_pathname.join(file_id)
         copy_file(link_mode, source_pathname, target_pathname)
@@ -109,7 +109,7 @@ module Archive
     # @return [Hash<String,FileFixity>] A revised hash with file_id paths prefixed with 'data/'
     def add_data_prefix(file_fixity_hash)
       new_hash = Hash.new
-      file_fixity_hash.values.each do |fixity|
+      file_fixity_hash.each_value do |fixity|
         fixity.file_id = "data/#{fixity.file_id}"
         new_hash[fixity.file_id] = fixity
       end
@@ -206,8 +206,7 @@ module Archive
     def info_payload_size
       info = read_bag_info_txt
       size_array = info['Payload-Oxum'].split('.')
-      size_hash = {:bytes => size_array[0].to_i, :files => size_array[1].to_i}
-      size_hash
+      { :bytes => size_array[0].to_i, :files => size_array[1].to_i }
     end
 
     # @return [Boolean] Compare the actual measured payload size against the value recorded in bag-info.txt
@@ -245,7 +244,7 @@ module Archive
       self.bag_checksum_types.each do |checksum_type|
         manifest_pathname = bag_pathname.join("#{manifest_type}-#{checksum_type}.txt")
         manifest_file = manifest_pathname.open(open_mode)
-        file_fixity_hash.values.each do |fixity|
+        file_fixity_hash.each_value do |fixity|
           checksum = fixity.get_checksum(checksum_type)
           manifest_file.puts("#{checksum} #{fixity.file_id}") if checksum
         end

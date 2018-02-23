@@ -9,7 +9,7 @@ module Archive
   # is sufficiently unique to act as a comparator for determining file equality or verifying checksum manifests.
   #
   # @note Copyright (c) 2014 by The Board of Trustees of the Leland Stanford Junior University.
-  #   All rights reserved.  See {file:LICENSE.rdoc} for details.
+  #   All rights reserved.  See {file:LICENSE} for details.
   class FileFixity
 
     # @param [Hash<Symbol,Object>] options Key,Value pairs specifying initial values of attributes
@@ -90,7 +90,7 @@ module Archive
           diff_hash[type] = {left => base_checksum, right => other_checksum }
         end
       end
-      return diff_hash.size > 0 ? diff_hash : nil
+      diff_hash.size > 0 ? diff_hash : nil
     end
   end
 end

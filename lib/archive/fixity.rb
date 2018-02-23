@@ -6,10 +6,10 @@ module Archive
   # A Struct to hold properties of a given checksum digest type
   ChecksumType = Struct.new(:id, :hex_length, :names)
 
-  # A helper class that facilites the generation and processing of checksums
+  # A helper class that facilitates the generation and processing of checksums
   #
   # @note Copyright (c) 2014 by The Board of Trustees of the Leland Stanford Junior University.
-  #   All rights reserved.  See {file:LICENSE.rdoc} for details.
+  #   All rights reserved.  See {file:LICENSE} for details.
   class Fixity
 
     @@default_checksum_types = [:sha1, :sha256]
@@ -85,7 +85,7 @@ module Archive
       digesters = Fixity.get_digesters(checksum_types)
       pathname.open("r") do |stream|
         while (buffer = stream.read(8192))
-          digesters.values.each { |digest| digest.update(buffer) }
+          digesters.each_value { |digest| digest.update(buffer) }
         end
       end
       digesters.each { |checksum_type, digest| file_fixity.checksums[checksum_type] = digest.hexdigest }
@@ -98,7 +98,7 @@ module Archive
     def Fixity.generate_checksums(base_pathname, path_list, checksum_types=@@default_checksum_types)
       path_list = base_pathname.find if path_list.nil?
       file_fixity_hash = Hash.new
-      path_list.select{|pathname| pathname.file?}.each  do |file|
+      path_list.select{|pathname| pathname.file?}.each do |file|
         file_fixity = Fixity.fixity_from_file(file, base_pathname, checksum_types)
         file_fixity_hash[file_fixity.file_id] = file_fixity
       end
@@ -128,7 +128,7 @@ module Archive
     # @return [Hash<String,Hash<Symbol,String] A hash containing file ids and checksum data derived from the file_fixity_hash
     def Fixity.file_checksum_hash(file_fixity_hash)
       checksum_hash = Hash.new
-      file_fixity_hash.values.each{|file| checksum_hash[file.file_id] = file.checksums}
+      file_fixity_hash.each_value { |file| checksum_hash[file.file_id] = file.checksums }
       checksum_hash
     end
 
@@ -136,8 +136,7 @@ module Archive
     # @param [Pathname,String] file_pathname The location of the file to digest
     # @return [String] The operating system shell command that will generate the checksum digest value
     def Fixity.openssl_digest_command(checksum_type,file_pathname)
-      command = "openssl dgst -#{checksum_type} #{file_pathname}"
-      command
+      "openssl dgst -#{checksum_type} #{file_pathname}"
     end
 
     # @param [Symbol,String] checksum_type The type of checksum digest to be generated
@@ -146,8 +145,7 @@ module Archive
     def Fixity.openssl_digest(checksum_type,file_pathname)
       command = openssl_digest_command(checksum_type,file_pathname)
       stdout = OperatingSystem.execute(command)
-      checksum = stdout.scan(/[A-Za-z0-9]+/).last
-      checksum
+      stdout.scan(/[A-Za-z0-9]+/).last
     end
   end
 end
