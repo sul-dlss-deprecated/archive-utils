@@ -1,12 +1,7 @@
-ENV['RSPEC'] = "true"
-
 require 'coveralls'
 Coveralls.wear!
 
 require 'archive-utils'
-
-# TODO: revise the config, so it doesn't use Moab-versioning gem
-#require 'spec_config'
 
 #require File.join(File.dirname(__FILE__),'../lib/libdir')
 
@@ -95,5 +90,4 @@ RSpec.configure do |config|
   config.before(:all) do
     @fixtures = Pathname.new(File.dirname(__FILE__)).join('fixtures').realpath
   end
-
 end
