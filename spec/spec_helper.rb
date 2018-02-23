@@ -1,10 +1,11 @@
 ENV['RSPEC'] = "true"
-#require 'rspec'
+
+require 'coveralls'
+Coveralls.wear!
+
 require 'awesome_print'
 require 'equivalent-xml'
 require 'fakeweb'
-require 'simplecov'
-SimpleCov.start
 require 'archive-utils'
 
 # TODO: revise the config, so it doesn't use Moab-versioning gem
@@ -97,6 +98,5 @@ RSpec.configure do |config|
   config.before(:all) do
     @fixtures = Pathname.new(File.dirname(__FILE__)).join('fixtures').realpath
   end
-
 
 end

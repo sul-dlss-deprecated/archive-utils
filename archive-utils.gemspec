@@ -8,8 +8,7 @@ Gem::Specification.new do |s|
   s.licenses    = 'Apache-2.0'
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Darren Weber', 'Richard Anderson']
-  s.email       = ['darren.weber@stanford.edu']
-  s.summary     = 'Ruby utilities for data archival (BagIt, Fixity, Tarfile).'
+  s.summary     = 'Utilities for data archival (BagIt, Fixity, Tarfile).'
   s.description = 'Contains classes to archive and retrieve digital object version content and metadata'
   s.homepage    = 'https://github.com/sul-dlss/archive-utils'
 
@@ -24,8 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'equivalent-xml', '~> 0.5'
   s.add_development_dependency 'fakeweb', '~> 1'
   s.add_development_dependency 'rspec', '~> 3.0'
-  s.add_development_dependency 'simplecov', '~> 0.7'
-  s.add_development_dependency 'yard', '~> 0.8'
+  s.add_development_dependency 'coveralls'
 
   s.files        = Dir.glob('lib/**/*')
   s.require_path = 'lib'
