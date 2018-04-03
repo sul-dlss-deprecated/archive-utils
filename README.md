@@ -5,7 +5,7 @@ archive-utils
 
 Ruby utilities for archival data (BagIt, Fixity, Tarfile).
 
-**Note** As of Q1 2018, this repository is being replaced by https://github.com/sul-dlss/preservation_robots
+**Note** As of Q1 2018, this repository is in the process of being replaced by https://github.com/sul-dlss/preservation_robots (not yet complete as of this writing).
 
 ## Installation
 
