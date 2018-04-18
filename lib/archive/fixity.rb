@@ -1,15 +1,14 @@
-require File.join(File.dirname(__FILE__),'../libdir')
-require 'archive-utils'
-
 module Archive
+
+  require 'digest'
 
   # A Struct to hold properties of a given checksum digest type
   ChecksumType = Struct.new(:id, :hex_length, :names)
 
-  # A helper class that facilites the generation and processing of checksums
+  # A helper class that facilitates the generation and processing of checksums
   #
   # @note Copyright (c) 2014 by The Board of Trustees of the Leland Stanford Junior University.
-  #   All rights reserved.  See {file:LICENSE.rdoc} for details.
+  #   All rights reserved.  See {file:LICENSE} for details.
   class Fixity
 
     @@default_checksum_types = [:sha1, :sha256]
@@ -26,11 +25,11 @@ module Archive
     end
 
     @@valid_checksum_types = [
-        ChecksumType.new(:md5, 32, ['MD5']),
-        ChecksumType.new(:sha1, 40, ['SHA-1', 'SHA1']),
-        ChecksumType.new(:sha256, 64, ['SHA-256', 'SHA256']),
-        ChecksumType.new(:sha384, 96, ['SHA-384', 'SHA384']),
-        ChecksumType.new(:sha512, 128, ['SHA-512', 'SHA512'])
+      ChecksumType.new(:md5, 32, ['MD5']),
+      ChecksumType.new(:sha1, 40, ['SHA-1', 'SHA1']),
+      ChecksumType.new(:sha256, 64, ['SHA-256', 'SHA256']),
+      ChecksumType.new(:sha384, 96, ['SHA-384', 'SHA384']),
+      ChecksumType.new(:sha512, 128, ['SHA-512', 'SHA512'])
     ]
 
     # @return [Array<ChecksumType>] The list of allowed ChecksumType structs containing the type's properties
@@ -84,21 +83,21 @@ module Archive
       file_fixity.bytes = pathname.size
       digesters = Fixity.get_digesters(checksum_types)
       pathname.open("r") do |stream|
-        while buffer = stream.read(8192)
-          digesters.values.each { |digest| digest.update(buffer) }
+        while (buffer = stream.read(8192))
+          digesters.each_value { |digest| digest.update(buffer) }
         end
       end
       digesters.each { |checksum_type, digest| file_fixity.checksums[checksum_type] = digest.hexdigest }
       file_fixity
     end
 
-     # @param [Pathname] base_pathname The directory path used as the base for deriving relative paths (file IDs)
+    # @param [Pathname] base_pathname The directory path used as the base for deriving relative paths (file IDs)
     # @param [Array<Pathname>] path_list The list of pathnames for files whose fixity will be generated
     # @return [Hash<String,FileFixity>] A hash containing file ids and fixity data derived from the actual files
     def Fixity.generate_checksums(base_pathname, path_list, checksum_types=@@default_checksum_types)
-      path_list = base_pathname.find  if path_list.nil?
+      path_list = base_pathname.find if path_list.nil?
       file_fixity_hash = Hash.new
-      path_list.select{|pathname| pathname.file?}.each  do |file|
+      path_list.select{|pathname| pathname.file?}.each do |file|
         file_fixity = Fixity.fixity_from_file(file, base_pathname, checksum_types)
         file_fixity_hash[file_fixity.file_id] = file_fixity
       end
@@ -128,7 +127,7 @@ module Archive
     # @return [Hash<String,Hash<Symbol,String] A hash containing file ids and checksum data derived from the file_fixity_hash
     def Fixity.file_checksum_hash(file_fixity_hash)
       checksum_hash = Hash.new
-      file_fixity_hash.values.each{|file| checksum_hash[file.file_id] = file.checksums}
+      file_fixity_hash.each_value { |file| checksum_hash[file.file_id] = file.checksums }
       checksum_hash
     end
 
@@ -136,8 +135,7 @@ module Archive
     # @param [Pathname,String] file_pathname The location of the file to digest
     # @return [String] The operating system shell command that will generate the checksum digest value
     def Fixity.openssl_digest_command(checksum_type,file_pathname)
-      command = "openssl dgst -#{checksum_type} #{file_pathname}"
-      command
+      "openssl dgst -#{checksum_type} #{file_pathname}"
     end
 
     # @param [Symbol,String] checksum_type The type of checksum digest to be generated
@@ -146,10 +144,7 @@ module Archive
     def Fixity.openssl_digest(checksum_type,file_pathname)
       command = openssl_digest_command(checksum_type,file_pathname)
       stdout = OperatingSystem.execute(command)
-      checksum = stdout.scan(/[A-Za-z0-9]+/).last
-      checksum
+      stdout.scan(/[A-Za-z0-9]+/).last
     end
-
   end
-
 end

@@ -8,24 +8,21 @@ Gem::Specification.new do |s|
   s.licenses    = 'Apache-2.0'
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Darren Weber', 'Richard Anderson']
-  s.email       = ['darren.weber@stanford.edu']
-  s.summary     = 'Ruby utilities for data archival (BagIt, Fixity, Tarfile).'
+  s.summary     = 'Utilities for data archival (BagIt, Fixity, Tarfile).'
   s.description = 'Contains classes to archive and retrieve digital object version content and metadata'
   s.homepage    = 'https://github.com/sul-dlss/archive-utils'
 
   s.required_rubygems_version = '>= 2.2.1'
 
   # Runtime dependencies
-  s.add_dependency 'systemu', '~> 2.6'
+  s.add_dependency 'systemu'
 
-  s.add_development_dependency 'pry', '~> 0'
-  s.add_development_dependency 'rake', '~> 10'
-  s.add_development_dependency 'awesome_print', '~> 1'
-  s.add_development_dependency 'equivalent-xml', '~> 0.5'
-  s.add_development_dependency 'fakeweb', '~> 1'
-  s.add_development_dependency 'rspec', '~> 3.0'
-  s.add_development_dependency 'simplecov', '~> 0.7'
-  s.add_development_dependency 'yard', '~> 0.8'
+  s.add_development_dependency 'coveralls'
+  s.add_development_dependency 'pry'
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rubocop', '~> 0.52.1' # avoid code churn due to rubocop changes
+  s.add_development_dependency 'rubocop-rspec'
 
   s.files        = Dir.glob('lib/**/*')
   s.require_path = 'lib'

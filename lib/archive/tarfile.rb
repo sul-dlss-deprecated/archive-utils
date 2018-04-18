@@ -1,12 +1,9 @@
-require File.join(File.dirname(__FILE__),'../libdir')
-require 'archive-utils'
-
 module Archive
 
   # A tar archive file containing a set of digital object files
   #
   # @note Copyright (c) 2014 by The Board of Trustees of the Leland Stanford Junior University.
-  #   All rights reserved.  See {file:LICENSE.rdoc} for details.
+  #   All rights reserved.  See {file:LICENSE} for details.
   class Tarfile
 
     # @return [String] create archive of the specified format
@@ -27,13 +24,13 @@ module Archive
     # @return [Tarfile] Initialize a new Tarfile object
     def initialize(options=nil)
       # set defaults
-      @format=:posix
+      @format = :posix
       @dereference = true
       @verify = false
       @multi_volume = false
       # override defaults
       options={} if options.nil?
-      options.each do |key,value|
+      options.each do |key, value|
         #instance_variable_set("@#{key}", value)
         send "#{key}=", value
       end
@@ -117,15 +114,12 @@ module Archive
 
     # @return [String] The shell command that will list the tarfile's contents
     def list_cmd
-      command = "tar --list --file=#{tarfile_fullpath} "
-      command
+      "tar --list --file=#{tarfile_fullpath} "
     end
 
     # @return [String] The list of the tarfile's contents
     def list_tarfile
-      command = list_cmd
-      list = OperatingSystem.execute(command)
-      list
+      OperatingSystem.execute(list_cmd)
     end
 
     # @return [Pathname] The location of the directory into which the tarfile should be extracted
@@ -150,11 +144,7 @@ module Archive
 
     # @return [String] Shell out to the operating system and extract the tar archive file
     def extract_tarfile
-      command = extract_cmd
-      stdout = OperatingSystem.execute(command)
-      stdout
+      OperatingSystem.execute(extract_cmd)
     end
-
   end
-
 end

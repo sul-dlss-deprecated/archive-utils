@@ -1,6 +1,3 @@
-require File.join(File.dirname(__FILE__),'../libdir')
-require 'archive-utils'
-
 module Archive
 
   # A BagIt bag contains a structured copy of a digital object for storage, transfer, or archive
@@ -8,7 +5,7 @@ module Archive
   # This class can be used to create, parse, or validate a bag instance
   #
   # @note Copyright (c) 2014 by The Board of Trustees of the Leland Stanford Junior University.
-  #   All rights reserved.  See {file:LICENSE.rdoc} for details.
+  #   All rights reserved.  See {file:LICENSE} for details.
   class BagitBag
 
     # @param [Pathname,String] pathname The location of the bag home directory
@@ -52,8 +49,8 @@ module Archive
     def write_bagit_txt
       bagit_txt = bag_pathname.join("bagit.txt")
       bagit_txt.open('w') do |f|
-       f.puts "Tag-File-Character-Encoding: UTF-8"
-       f.puts "BagIt-Version: 0.97"
+        f.puts "Tag-File-Character-Encoding: UTF-8"
+        f.puts "BagIt-Version: 0.97"
       end
       bagit_txt
     end
@@ -96,7 +93,7 @@ module Archive
     # @return [Pathname] Copy or link the files specified in the file_fixity_hash to the payload directory,
     #   then update the payload manifest files
     def add_files_to_payload(link_mode, source_basepath, file_fixity_hash)
-      file_fixity_hash.keys.each do |file_id|
+      file_fixity_hash.each_key do |file_id|
         source_pathname = source_basepath.join(file_id)
         target_pathname = payload_pathname.join(file_id)
         copy_file(link_mode, source_pathname, target_pathname)
@@ -109,7 +106,7 @@ module Archive
     # @return [Hash<String,FileFixity>] A revised hash with file_id paths prefixed with 'data/'
     def add_data_prefix(file_fixity_hash)
       new_hash = Hash.new
-      file_fixity_hash.values.each do |fixity|
+      file_fixity_hash.each_value do |fixity|
         fixity.file_id = "data/#{fixity.file_id}"
         new_hash[fixity.file_id] = fixity
       end
@@ -166,7 +163,7 @@ module Archive
     # @return [Hash<Symbol,Integer>] A hash contining the payload size in bytes, and the number of files,
     #   derived from the payload directory contents
     def bag_payload_size
-      payload_pathname.find.select{|f| f.file?}.inject({bytes: 0, files: 0}) do |hash,file|
+      payload_pathname.find.select { |f| f.file? }.inject({ bytes: 0, files: 0 }) do |hash,file|
         hash[:bytes] += file.size
         hash[:files] += 1
         hash
@@ -206,8 +203,7 @@ module Archive
     def info_payload_size
       info = read_bag_info_txt
       size_array = info['Payload-Oxum'].split('.')
-      size_hash = {:bytes => size_array[0].to_i, :files => size_array[1].to_i}
-      size_hash
+      { :bytes => size_array[0].to_i, :files => size_array[1].to_i }
     end
 
     # @return [Boolean] Compare the actual measured payload size against the value recorded in bag-info.txt
@@ -223,7 +219,7 @@ module Archive
     # @return [Hash<String,FileFixity>] create hash containing ids and checksums for all files in the bag's root directory
     def generate_tagfile_checksums
       # get list of all files in the bag home dir, except those starting with 'tagmanifest'
-      tagfiles = bag_pathname.children.reject{|file| file.basename.to_s.start_with?('tagmanifest')}
+      tagfiles = bag_pathname.children.reject { |file| file.basename.to_s.start_with?('tagmanifest') }
       # generate checksums, using bag home dir as the base directory for file ids (per bagit spec)
       Fixity.generate_checksums(bag_pathname, tagfiles, bag_checksum_types )
     end
@@ -245,7 +241,7 @@ module Archive
       self.bag_checksum_types.each do |checksum_type|
         manifest_pathname = bag_pathname.join("#{manifest_type}-#{checksum_type}.txt")
         manifest_file = manifest_pathname.open(open_mode)
-        file_fixity_hash.values.each do |fixity|
+        file_fixity_hash.each_value do |fixity|
           checksum = fixity.get_checksum(checksum_type)
           manifest_file.puts("#{checksum} #{fixity.file_id}") if checksum
         end
@@ -275,7 +271,7 @@ module Archive
       end
       self.bag_checksum_types = self.bag_checksum_types | checksum_type_list
       file_fixity_hash
-     end
+    end
 
     # @return [Boolean] Compare fixity data from the tag manifest files against the values measured by digesting the files
     def verify_tagfile_manifests
@@ -333,9 +329,8 @@ module Archive
 
     # @return [Boolean] Test the existence of expected files, return true if files exist, raise exception if not
     def verify_bag_structure
-      required_files = ['data','bagit.txt','bag-info.txt','manifest-sha256.txt','tagmanifest-sha256.txt']
-      required_files.each{|filename| verify_pathname(bag_pathname.join(filename))}
-      optional_files = []
+      required_files = ['data', 'bagit.txt', 'bag-info.txt', 'manifest-sha256.txt', 'tagmanifest-sha256.txt']
+      required_files.each { |filename| verify_pathname(bag_pathname.join(filename)) }
       true
     end
 
@@ -345,9 +340,5 @@ module Archive
       raise "#{pathname.basename} not found at #{pathname}" unless pathname.exist?
       true
     end
-
-
   end
-
-
 end
